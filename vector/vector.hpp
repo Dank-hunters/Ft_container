@@ -365,6 +365,49 @@ namespace ft
 				
 				void insert (iterator position, size_type n, const value_type& val)
 				{
+					size_type _n = position - begin();
+					if (capacity() < size() + n)
+					{
+						if (capacity() == 0)
+							add_memory(n);
+						else 
+						{
+							if ((capacity() * 2) < capacity() + n)
+								{
+									add_memory(((capacity() *2) + n));
+								}
+							else 	
+								add_memory(capacity()*2);
+						}
+					}
+					iterator tmp = _end - 1;
+					while(tmp != begin() + _n)
+					{
+						_alloc.construct(&(*(tmp + n)), *(tmp));
+						_alloc.destroy(&(*(tmp)));
+						tmp--;
+					}
+					tmp++;
+					for (size_t i = 0; i < n; i++)
+					{
+						_alloc.construct(&(*tmp), val);
+						tmp++;
+					}
+					_end += n;
+				}
+
+		template <class InputIterator>
+			typename enable_if<!ft::is_integral<InputIterator>::value, void>::type insert (iterator position, InputIterator first, InputIterator last)
+				{
+					size_type _n = position - begin();
+					InputIterator tmps = first;
+					size_type n = 0;//first - last;
+					while(tmps != last)
+						{
+							//dprintf(1, "%zu\n", n);
+							n++;
+							tmps++;
+						}
 					if (capacity() < size() + n)
 					{
 						if (capacity() == 0)
@@ -379,29 +422,24 @@ namespace ft
 								add_memory(capacity()*2);
 						}
 					}
-					_end += n;
-					iterator tmp = _end ;
-					while(tmp != position + n - 1)
+					iterator tmp = _end - 1;
+					while(tmp != begin() + _n)
 					{
-						_alloc.construct(&(*tmp), *(tmp - n));
-						_alloc.destroy(&(*(tmp - n)));
+						_alloc.construct(&(*(tmp + n)), *(tmp));
+						_alloc.destroy(&(*(tmp)));
 						tmp--;
 					}
+					tmp++;
+				//	tmp = first;
 					for (size_t i = 0; i < n; i++)
 					{
-						_alloc.construct(&(*position), val);
-						position++;
+						_alloc.construct(&(*tmp), *first);
+						tmp++;
+						first++;
 					}
+					_end += n;
+			//	return (first);
 				}
-
-				template <class InputIterator>
-				typename enable_if<!ft::is_integral<InputIterator>::value, void>::type
-							 insert (iterator position, InputIterator first, InputIterator last)
-							 {
-
-								int i = 0;
-
-							 }
 				
 		};
 }
