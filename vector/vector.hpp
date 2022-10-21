@@ -6,6 +6,7 @@
 #include "../includes/random_acces_iterator.hpp"
 #include "../includes/iterator_vector.hpp"
 #include "../includes/enable_if.hpp"
+#include "../includes/compare.hpp"
 #include "../includes/reverse_iterator.hpp"
 namespace ft
 {
@@ -31,7 +32,6 @@ namespace ft
 				typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			private:
 				allocator_type  _alloc;
-				size_t          _capacity;
 				pointer         _end;
 				pointer         _start;
 				pointer         _end_of_storage;
@@ -171,12 +171,14 @@ namespace ft
 				{
 					clear();
 
-				//	if (capacity() < x.capacity())
-
-					//else
+					if (capacity() < x.capacity())
+					{
+						dprintf(1, "sss");
+							insert(begin(), x.begin(), x.end());
+					}
+					else
 						assign(x.begin(), x.end());
 					return (*this);
-					
 				}
 
 				//                      Iterator                
@@ -401,13 +403,12 @@ namespace ft
 				{
 					size_type _n = position - begin();
 					InputIterator tmps = first;
-					size_type n = 0;//first - last;
+					size_type n = 0;
 					while(tmps != last)
-						{
-							//dprintf(1, "%zu\n", n);
-							n++;
-							tmps++;
-						}
+					{
+						n++;
+						tmps++;
+					}
 					if (capacity() < size() + n)
 					{
 						if (capacity() == 0)
@@ -422,15 +423,17 @@ namespace ft
 								add_memory(capacity()*2);
 						}
 					}
+					//iterator srcs = end() - 1;
+					//iterator dest = srcs + n;
 					iterator tmp = _end - 1;
-					while(tmp != begin() + _n)
+					while(tmp >= _start + _n)
+					//while( srcs 
 					{
 						_alloc.construct(&(*(tmp + n)), *(tmp));
 						_alloc.destroy(&(*(tmp)));
 						tmp--;
 					}
 					tmp++;
-				//	tmp = first;
 					for (size_t i = 0; i < n; i++)
 					{
 						_alloc.construct(&(*tmp), *first);
@@ -438,8 +441,119 @@ namespace ft
 						first++;
 					}
 					_end += n;
-			//	return (first);
+				}
+
+				void swap (vector& x)
+				{
+				pointer         tmp_end = x._end;
+				pointer         tmp_start = x._start;
+				pointer         tmp_end_of_storage = x._end_of_storage;
+				
+				x._end = _end;
+				x._end_of_storage = _end_of_storage;
+				x._start = _start;
+
+				_end = tmp_end;
+				_end_of_storage = tmp_end_of_storage;
+				_start = tmp_start;
+				}
+				// acces operator
+
+				reference operator[] (size_type n)
+				{
+					return _start[n];
 				}
 				
+				const_reference operator[] (size_type n) const
+				{
+					if (n >= size())
+						throw std::out_of_range("vector");
+					return _start[n];
+				}
+
+				reference at (size_type n)
+				{
+					if (n >= size())
+						throw std::out_of_range("vector");
+					return _start[n];
+
+				}
+				const_reference at (size_type n) const
+				{
+					if (n >= size())
+						throw std::out_of_range("vector");
+					return _start[n];
+				}
+				reference front()
+				{
+					return *_start;
+				}
+				
+				const_reference front() const
+				{
+					return *_start;
+				}
+				reference back()
+				{
+					return *_end - 1;
+				}
+				const_reference back() const
+				{
+					return *_end - 1;
+				}
+
+				allocator_type get_allocator() const
+				{
+					return (_alloc);
+				}
+
 		};
+
+		template <class T, class Alloc>  
+			bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return !(lhs != rhs);
+			}
+		template <class T, class Alloc>  
+			bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+			}
+		template <class T, class Alloc>  
+			bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+			}
+		template <class T, class Alloc>  
+			bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return lhs < rhs;
+			}
+		template <class T, class Alloc>  
+			bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return !(lhs < rhs);
+			}
+		template <class T, class Alloc>  
+			bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return lhs > rhs;
+			}
+		
+		template < class T, class Alloc = std::allocator<T> > 
+				std::ostream &	operator<<(std::ostream & o, vector<T>  & rhs)
+				{
+					o << "_start = " << *rhs.begin() << std::endl;
+					o << "capacity : " << rhs.capacity() << std::endl;
+					o << "size : " << rhs.size() << std::endl;
+					o << "content :" << std::endl;
+					
+					typename vector<T, Alloc>::iterator tmp = rhs.begin();
+					
+					while (tmp != rhs.end())
+					{
+						o << *tmp++ << std::endl;
+					}
+					return o;
+				}
 }
