@@ -356,23 +356,13 @@ namespace ft
 				
 				iterator insert (iterator position, const value_type& val)
     			{
-					if (capacity() < size() + 1)
-					{
-						if (capacity() == 0)
-								add_memory(1);
-						else 
-							add_memory(capacity() * 2);
-					}
-					_end++;
-					iterator tmp = _end;
-					while(tmp != position)
-					{
-						_alloc.construct(&(*tmp), *(tmp - 1));
-						_alloc.destroy(&(*(tmp - 1)));
-						tmp--;
-					}
-					_alloc.construct(&(*position), val);
-					return(position);
+						iterator	it;
+						size_type	index;
+
+						index = position - this->begin();
+						this->insert(position, 1, val);
+						return iterator(this->begin() + index);
+				
 				}
 
 				void insert (iterator position, size_type n, const value_type& val)
@@ -390,6 +380,7 @@ namespace ft
 								}
 							else 	
 								reserve(capacity()*2);
+							//reserve(capacity() + n);
 						}
 					}
 					iterator tmp = end() - 1;
@@ -410,14 +401,15 @@ namespace ft
 
 		template <class InputIterator>
 			typename enable_if<!ft::is_integral<InputIterator>::value, void>::type insert (iterator position, InputIterator first, InputIterator last)
-				{
-				InputIterator tmps = first;
+				{		
+					InputIterator tmps = first;
 					size_type n = 0;
 					while(tmps != last)
 					{
 						n++;
 						tmps++;
 					}
+					size_type _n = &(*position) - _start;
 					if (capacity() < size() + n)
 					{
 						if (capacity() == 0)
@@ -432,13 +424,13 @@ namespace ft
 							{
 								reserve(capacity()*2);
 							}
+						//reserve(capacity() + n);
 						}
 					}
-					size_type _n = static_cast<size_type>(position - _start);
-					dprintf(1, "%zu\n", n);
 					iterator tmp = _end - 1;
-					while(tmp >= iterator(_start + n))
+					while(tmp >= iterator(_start + _n))
 					{
+					//dprintf(1, "%zusadasdas\n", n);
 						_alloc.construct(&(*(tmp + n)), *(tmp));
 						_alloc.destroy(&(*(tmp)));
 						tmp--;
@@ -450,7 +442,7 @@ namespace ft
 						tmp++;
 						first++;
 					}
-					_end += n;
+					_end += n;//b_items;
 				}
 
 				void swap (vector& x)
@@ -532,7 +524,7 @@ namespace ft
 		template <class T, class Alloc>  
 			bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return !(lhs > rhs);
+				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 			}
 		template <class T, class Alloc>  
 			bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
@@ -542,28 +534,12 @@ namespace ft
 		template <class T, class Alloc>  
 			bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+				return !(lhs < rhs);
 			}
 		template <class T, class Alloc>  
 			bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
 				return lhs > rhs;
 			}
-		
-		template < class T, class Alloc = std::allocator<T> > 
-				std::ostream &	operator<<(std::ostream & o, vector<T>  & rhs)
-				{
-					o << "_start = " << *rhs.begin() << std::endl;
-					o << "capacity : " << rhs.capacity() << std::endl;
-					o << "size : " << rhs.size() << std::endl;
-					o << "content :" << std::endl;
-					
-					typename vector<T, Alloc>::iterator tmp = rhs.begin();
-					
-					while (tmp != rhs.end())
-					{
-						o << *tmp++ << std::endl;
-					}
-					return o;
-				}
+
 }

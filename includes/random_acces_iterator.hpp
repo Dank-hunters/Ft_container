@@ -48,7 +48,7 @@ namespace ft
                         return *this;
                 }
 
-                random_access_iterator operator++(value_type)
+                random_access_iterator operator++(int)
                 {
                         random_access_iterator tmp(*this);
                         ++_it;
@@ -74,16 +74,26 @@ namespace ft
                 };
                 difference_type operator+(const random_access_iterator &it)
                 {
-                        return _it + it._it; }
-                ;
+                        return _it + it._it; 
+                };
+
+		pointer	get_internal_pointer(void) const
+		{
+			return _it;
+		}
+                int		operator - (random_access_iterator<const T> const &other) const
+		{
+			return _it - other.get_internal_pointer();
+		}
+
                 random_access_iterator operator-(difference_type n) const
                 {
                         return random_access_iterator<value_type>(_it - n);
                 };
-                difference_type operator-(const random_access_iterator &it)
+               /* difference_type operator-(const random_access_iterator &it)
                 {
                         return _it - it._it;
-                };
+                };*/
                 random_access_iterator &operator+=(difference_type n)
                 {
                         _it += n;
@@ -101,3 +111,12 @@ namespace ft
 
         };
 }
+
+
+
+
+
+
+
+
+
