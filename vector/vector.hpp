@@ -85,7 +85,19 @@ namespace ft
 						}
 						_alloc.deallocate(_del, n);
 					}
+				}
 
+				void	clear_memory(size_type n)
+				{
+					size_type i = 0;
+					while (i < n && _end >= _start)
+					{
+						if (_end == _start)
+							_alloc.destroy(_start);
+						else 
+							_alloc.destroy(--_end);
+						i++;
+					}
 				}
 
 				void    add_memory(size_type n)
@@ -98,7 +110,7 @@ namespace ft
 					_end = tmp;
 					while(i != sized)
 					{
-						_alloc.construct(_end++, start[i]);
+						_alloc.construct(_end++, *start++);
 						i++;
 					}
 					_end_of_storage = _end;
@@ -107,8 +119,9 @@ namespace ft
 						++_end_of_storage;
 						i++;
 					}
-					delete_block(_start, sized);
+					pointer cpy = _start;
 					_start = tmp;
+					delete_block(cpy, sized);
 				}
 
 				iterator remove_block(iterator first, iterator last)
@@ -171,11 +184,8 @@ namespace ft
 				{
 					clear();
 
-					if (capacity() < x.capacity())
-					{
-						dprintf(1, "sss");
-							insert(begin(), x.begin(), x.end());
-					}
+					if (capacity() > x.capacity())
+						insert(begin(), x.begin(), x.end());
 					else
 						assign(x.begin(), x.end());
 					return (*this);
@@ -274,7 +284,7 @@ namespace ft
 						}
 						if (n > capacity())
 						{
-							delete_block(_start, size());
+							clear_memory(size());
 							_start = _alloc.allocate(n);
 							_end = _start;
 							_end_of_storage = _end;
@@ -331,7 +341,7 @@ namespace ft
 
 				void clear()
 				{
-					delete_block(_start, capacity());
+					clear_memory(size());
 				}
 
 				iterator erase (iterator position)
@@ -364,26 +374,26 @@ namespace ft
 					_alloc.construct(&(*position), val);
 					return(position);
 				}
-				
+
 				void insert (iterator position, size_type n, const value_type& val)
 				{
 					size_type _n = position - begin();
 					if (capacity() < size() + n)
 					{
 						if (capacity() == 0)
-							add_memory(n);
+							reserve(n);
 						else 
 						{
 							if ((capacity() * 2) < capacity() + n)
 								{
-									add_memory(((capacity() *2) + n));
+									reserve(((capacity() *2) + n));
 								}
 							else 	
-								add_memory(capacity()*2);
+								reserve(capacity()*2);
 						}
 					}
-					iterator tmp = _end - 1;
-					while(tmp != begin() + _n)
+					iterator tmp = end() - 1;
+					while(tmp >= begin() + _n)
 					{
 						_alloc.construct(&(*(tmp + n)), *(tmp));
 						_alloc.destroy(&(*(tmp)));
@@ -401,8 +411,7 @@ namespace ft
 		template <class InputIterator>
 			typename enable_if<!ft::is_integral<InputIterator>::value, void>::type insert (iterator position, InputIterator first, InputIterator last)
 				{
-					size_type _n = position - begin();
-					InputIterator tmps = first;
+				InputIterator tmps = first;
 					size_type n = 0;
 					while(tmps != last)
 					{
@@ -412,22 +421,23 @@ namespace ft
 					if (capacity() < size() + n)
 					{
 						if (capacity() == 0)
-							add_memory(n);
+							reserve(n);
 						else 
 						{
-							if ((capacity() * 2) < capacity() + n)
+							if ((capacity() * 2) < (capacity() + n))
 								{
-									add_memory((capacity() *2) + n);
+									reserve(((capacity() *2) + n));
 								}
 							else 	
-								add_memory(capacity()*2);
+							{
+								reserve(capacity()*2);
+							}
 						}
 					}
-					//iterator srcs = end() - 1;
-					//iterator dest = srcs + n;
+					size_type _n = static_cast<size_type>(position - _start);
+					dprintf(1, "%zu\n", n);
 					iterator tmp = _end - 1;
-					while(tmp >= _start + _n)
-					//while( srcs 
+					while(tmp >= iterator(_start + n))
 					{
 						_alloc.construct(&(*(tmp + n)), *(tmp));
 						_alloc.destroy(&(*(tmp)));
@@ -512,17 +522,17 @@ namespace ft
 		template <class T, class Alloc>  
 			bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return !(lhs != rhs);
+				return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 			}
 		template <class T, class Alloc>  
 			bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+				return !(lhs == rhs);
 			}
 		template <class T, class Alloc>  
 			bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+				return !(lhs > rhs);
 			}
 		template <class T, class Alloc>  
 			bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
@@ -532,7 +542,7 @@ namespace ft
 		template <class T, class Alloc>  
 			bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return !(lhs < rhs);
+				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 			}
 		template <class T, class Alloc>  
 			bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
