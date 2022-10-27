@@ -23,8 +23,8 @@ namespace ft
 				typedef typename allocator_type::pointer                    pointer;
 				typedef typename allocator_type::const_pointer              const_pointer;
 
-				typedef  ft::random_access_iterator<value_type>				iterator;
-				typedef  ft::random_access_iterator<const value_type> 		const_iterator;
+				typedef  ft::random_access_iterator<value_type, value_type&, value_type*>				iterator;
+				typedef  ft::random_access_iterator<const value_type, const value_type&, const value_type*> 		const_iterator;
 				typedef  ft::reverse_iterator<iterator>                     reverse_iterator;    
 				typedef  ft::reverse_iterator<const_iterator>               const_reverse_iterator;
 
@@ -126,22 +126,24 @@ namespace ft
 
 				iterator remove_block(iterator first, iterator last)
 				{
-					iterator tmp = first;
+							iterator tmp = first;
 
 					if (first == last)
 						return (first);
 					while (tmp != last)
 					{
-						_alloc.destroy(&(tmp));
+						_alloc.destroy(&(*tmp));
 						tmp++;
 						_end--;
 					}
 					tmp = first;
+					size_type i = 0;
 					while(tmp != _end)
 					{
-						_alloc.construct(&(*tmp), *(tmp + 1));
-						_alloc.destroy(&(*(tmp + 1)));
+						_alloc.construct(&(*tmp), *(last + i));
+						_alloc.destroy(&(*(last + i)));
 						tmp++;
+						i++;
 					}
 					//_end--;
 					return(first);
@@ -150,24 +152,24 @@ namespace ft
 
 				//                      constructeur/destructeur
 
-				explicit vector (const allocator_type& alloc = allocator_type()) : _end(NULL), _start(NULL), _end_of_storage(NULL), _alloc(alloc) 
+				explicit vector (const allocator_type& alloc = allocator_type()) : _alloc(alloc) , _end(NULL), _start(NULL), _end_of_storage(NULL)
 			    {}
 
 				explicit vector (size_type n, 
 						const value_type& val = value_type(),
-						const allocator_type& alloc = allocator_type()) :_end(NULL), _start(NULL), _end_of_storage(NULL),  _alloc(alloc)
+						const allocator_type& alloc = allocator_type()) :_alloc(alloc) , _end(NULL), _start(NULL), _end_of_storage(NULL)
 			    {   
 				    assign(n, val);
 			    }
 
 				template <class Itt>         
 					vector (Itt first, Itt last, 
-							const allocator_type& alloc = allocator_type()) : _end(NULL), _start(NULL), _end_of_storage(NULL),  _alloc(alloc)
+							const allocator_type& alloc = allocator_type()) : _alloc(alloc) , _end(NULL), _start(NULL), _end_of_storage(NULL)
 			    {
 				    assign(first, last);
 			    }
 
-				vector (const vector& x) : _end(NULL), _start(NULL), _end_of_storage(NULL),  _alloc(x._alloc)
+				vector (const vector& x) :  _alloc(x._alloc), _end(NULL), _start(NULL), _end_of_storage(NULL)
 			    {
 				    *this = x;
 			    }
@@ -241,8 +243,8 @@ namespace ft
                 }
 				size_type max_size() const
 				{
-					//return std::numeric_limits<size_type>::max() / sizeof(T); 	
-					return std::numeric_limits<difference_type>::max() / sizeof(T); 	
+					return std::numeric_limits<size_type>::max() / sizeof(T); 	
+					//return std::numeric_limits<difference_type>::max() / sizeof(T); 	
 				}
 				bool empty() const
 				{
@@ -263,7 +265,10 @@ namespace ft
 					{
 						if (n > capacity())
 						{
-							add_memory(n - capacity());
+							if (capacity() * 2 < n)
+								add_memory(n);
+							else
+								add_memory(capacity() * 2);
 							set_new_block(n - size(), val);
 						}
 						else
@@ -440,7 +445,7 @@ namespace ft
 					{
 						_alloc.construct(&(*tmp), *first);
 						tmp++;
-						first++;
+					first++;
 					}
 					_end += n;//b_items;
 				}
@@ -497,11 +502,11 @@ namespace ft
 				}
 				reference back()
 				{
-					return *_end - 1;
+					return *(_end - 1);
 				}
 				const_reference back() const
 				{
-					return *_end - 1;
+					return *(_end - 1);
 				}
 
 				allocator_type get_allocator() const
@@ -514,6 +519,8 @@ namespace ft
 		template <class T, class Alloc>  
 			bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
+				if (lhs.size() != rhs.size())
+					return(false);
 				return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 			}
 		template <class T, class Alloc>  
@@ -529,17 +536,17 @@ namespace ft
 		template <class T, class Alloc>  
 			bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return lhs < rhs;
+				return !(rhs < lhs);
 			}
 		template <class T, class Alloc>  
 			bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return !(lhs < rhs);
+				return rhs < lhs;
 			}
 		template <class T, class Alloc>  
 			bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 			{
-				return lhs > rhs;
+				return !(lhs < rhs);
 			}
 
 }
