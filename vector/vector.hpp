@@ -385,7 +385,6 @@ namespace ft
 								}
 							else 	
 								reserve(capacity()*2);
-							//reserve(capacity() + n);
 						}
 					}
 					iterator tmp = end() - 1;
@@ -429,13 +428,11 @@ namespace ft
 							{
 								reserve(capacity()*2);
 							}
-						//reserve(capacity() + n);
 						}
 					}
 					iterator tmp = _end - 1;
 					while(tmp >= iterator(_start + _n))
 					{
-					//dprintf(1, "%zusadasdas\n", n);
 						_alloc.construct(&(*(tmp + n)), *(tmp));
 						_alloc.destroy(&(*(tmp)));
 						tmp--;
@@ -447,7 +444,7 @@ namespace ft
 						tmp++;
 					first++;
 					}
-					_end += n;//b_items;
+					_end += n;
 				}
 
 				void swap (vector& x)
