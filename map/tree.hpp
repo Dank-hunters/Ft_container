@@ -55,6 +55,21 @@ namespace ft
 			}
 			return tmpdaddy;
 		}
+		Node *prev(void)
+		{
+			Node *tmp = this;
+
+			if (tmp->left)
+				return maxi(tmp->left);
+
+			Node* p = tmp->daddy;
+			while (p && tmp == p->left)
+			{
+				tmp = p;
+				p = p->daddy;
+			}
+			return p;
+		}
 	};
 
 
@@ -146,8 +161,32 @@ namespace ft
 			}
 		size_type erase (const value_type& val)
 		{
-				node_ptr	cursor = _root;
-				node_ptr	prev = NULL;
+			node_ptr	cursor = _root;
+			/*if (!_compare(val, _root->val) && !_compare(_root->val, val))
+			{
+				node_ptr tm;
+				if (cursor->left)
+					tm = cursor->mini(cursor);
+				else 
+					tm = cursor->mini(cursor->right);
+				_root = tm;
+				_root->daddy = NULL;
+				if (cursor->left)
+				{
+				dprintf(1, "%i\n", tm->val);
+					_root->left = cursor->left;
+					cursor->left->daddy = _root;
+				}
+				if (cursor->right)
+				{
+				dprintf(1, "%i\n", cursor->val);
+					_root->right = cursor->right;
+					cursor->right->daddy = _root;
+				}
+				return(1);
+			}*/
+
+			node_ptr	prev = NULL;
 			while (cursor)
 			{
 				prev = cursor;
@@ -172,6 +211,31 @@ namespace ft
 							tmp->daddy = cursor->daddy;
 							tmp->left = cursor->left;
 						}
+						else
+						{
+							if (tmp->right)
+							{
+								tmp->daddy->left = tmp->right;
+								tmp->right->daddy = tmp->daddy;
+							}
+							if (!cursor->daddy)
+								_root = tmp;
+							else if(cursor->daddy->right == cursor)
+								cursor->daddy->right = tmp;
+							else
+								cursor->daddy->left = tmp;
+							if(tmp->daddy->right == cursor)
+								tmp->daddy->right = tmp;
+							else
+								tmp->daddy->left = tmp;
+							tmp->daddy = cursor->daddy;
+							tmp->left = cursor->left;
+							tmp->right = cursor->right;
+							cursor->left->daddy = tmp;
+							cursor->right->daddy = tmp;
+						}
+						_destroy_node(cursor);
+
 					}
 					else if (cursor->left && !cursor->right)
 					{

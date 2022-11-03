@@ -1,7 +1,7 @@
 #pragma once
 #include <iterator>
 #include "iterator_traits.hpp"
-#include <map>
+#include "map/tree.hpp"
 
 namespace ft
 {
@@ -35,6 +35,31 @@ namespace ft
 
                 bool operator==(const _const &it) const { return _it == it.operator->(); }
                 bool operator!=(const _const &it) const { return _it != it.operator->(); }
+
+                bidirectional_iterator &operator++()
+                {
+                        _it = _it->next();
+                        return *this;
+                }
+
+                bidirectional_iterator operator++(int)
+                {
+                        bidirectional_iterator tmp = _it;
+                        _it = _it->next();
+                        return tmp;
+                }
+
+                random_access_iterator &operator--()
+                {
+                        return *_it->prev();
+                }
+
+                random_access_iterator operator--(int)
+                {
+                        bidirectional_iterator tmp = _it;
+                        _it = _it->prev();
+                        return tmp;
+                }
 
     };
 
