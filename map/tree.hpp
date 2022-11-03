@@ -22,7 +22,39 @@ namespace ft
 
 
 		Node(const value_type &val): left(NULL), right(NULL), daddy(NULL), val(val){} 
-		~Node();
+
+		Node	*mini(Node *search)
+		{
+			if (search->left == NULL)
+				return (search);
+			while (search->left)
+				search = search->left;
+			return (search);
+		}
+
+		Node	*maxi(Node *search)
+		{
+			if (search->right == NULL)
+				return (search);
+			while (search->right)
+				search = search->right;
+			return (search);
+		}
+		Node *next()
+		{
+			Node *tmp = this;
+			if (tmp->right)
+				return mini(tmp->right);
+
+			Node* tmpdaddy = tmp->daddy;
+
+			while (tmpdaddy && tmp == tmpdaddy->right)
+			{
+				tmp = tmpdaddy;
+				tmpdaddy = tmpdaddy->daddy;
+			}
+			return tmpdaddy;
+		}
 	};
 
 
@@ -69,6 +101,10 @@ namespace ft
 			return(node);
 		}
 		public :
+
+
+
+
 		/*ft::pair<iterator,bool>*/ void insert (const value_type &val)
 		{
 			node_ptr	cursor = _root;
@@ -97,9 +133,16 @@ namespace ft
 			}
 			void	_destroy_node(node_ptr &node)
 			{
-						//_alloc.destroy(node);
-						//_alloc.deallocate(node, 1);
+						_alloc.destroy(node);
+						_alloc.deallocate(node, 1);
 						_size--;
+						if (_size == 0)
+						{
+							_root->daddy = NULL;
+							_root->left = NULL;
+							_root->right = NULL;
+							_root = NULL;
+						}
 			}
 		size_type erase (const value_type& val)
 		{
@@ -116,16 +159,38 @@ namespace ft
 				{
 					if (cursor->left && cursor->right)
 					{
-						
+						node_ptr tmp = cursor->next();
+						if (tmp == cursor->right)
+						{
+							if (!cursor->daddy)
+								_root = tmp;
+							else if (cursor->daddy->right == cursor)
+								cursor->daddy->right = tmp;
+							else
+								cursor->daddy->left = tmp;
+							cursor->left->daddy = tmp;
+							tmp->daddy = cursor->daddy;
+							tmp->left = cursor->left;
+						}
+					}
+					else if (cursor->left && !cursor->right)
+					{
+						if (cursor->daddy->right == cursor)
+							cursor->daddy->right = cursor->left;
+						else
+							cursor->daddy->left = cursor->right;
+						cursor->left->daddy = cursor->daddy;
+						_destroy_node(cursor);
 
 					}
-					else if (cursor->left)
+					else if (cursor->right && !cursor->left)
 					{
-
-					}
-					else if (cursor->right)
-					{
-
+						if (cursor->daddy->right == cursor)
+							cursor->daddy->right = cursor->right;
+						else
+							cursor->daddy->left = cursor->right;
+						cursor->right->daddy = cursor->daddy;
+						_destroy_node(cursor);	
 					}
 					else
 					{
@@ -139,8 +204,6 @@ namespace ft
 				}
 			}
 			return (0);
-
-
 		}
 
 

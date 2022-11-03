@@ -1,0 +1,102 @@
+map_node	*node;
+			map_node	*right;
+			map_node	*left;
+			map_node	*parent;
+            map_node    *next;
+
+			node = position.get_internal_pointer();
+			right = node->right;
+			left = node->left;
+			parent = node->parent;
+            next = node->next();
+			if (!right && !left)
+			{
+				if (parent->right == node)
+					parent->right = NULL;
+				else
+					parent->left = NULL;
+			}
+			else if (!right && left)
+			{
+				if (parent->right == node)
+					parent->right = left;
+				else
+					parent->left = left;
+				left->parent = parent;
+			}
+			else if (right && !left)
+			{
+				if (parent->right == node)
+					parent->right = right;
+				else
+					parent->left = right;
+				right->parent = parent;
+			}
+			else
+			{
+				if (next != node->right)
+				{
+					if (next->right)
+					{
+						next->parent->left = next->right;
+						next->right->parent = next->parent;
+					}
+					if (!parent)
+						_root = next;
+					else if (parent->right == node)
+						parent->right = next;
+					else
+						parent->left = next;
+                    if (next->parent->right == next)
+                        next->parent->right = NULL;
+                    else
+                        next->parent->left = NULL;
+					next->parent = parent;
+					next->right = right;
+					next->left = left;
+					left->parent = next;
+					right->parent = next;
+				}
+				else
+				{
+					if (!parent)
+						_root = next;
+					else if (parent->right == node)
+						parent->right = next;
+					else
+						parent->left = next;
+					left->parent = next;
+					next->parent = parent;
+					next->left = left;
+				}
+			}
+			_node_alloc.destroy(node);
+			_node_alloc.deallocate(node, 1);
+			_size--;
+			if (_size == 0)
+			{
+				_root = NULL;
+				_rend->right = NULL;
+				_rend->left = NULL;
+				_end->right = NULL;
+				_end->left = NULL;
+				_rend->parent = _end;
+			}
+		}
+		
+		BSTNode *next(void)
+		{
+			BSTNode* tmp = this;
+
+			if (tmp->right)
+				return findMin(tmp->right);
+
+			BSTNode* tmpparent = tmp->parent;
+
+			while (tmpparent && tmp == tmpparent->right)
+			{
+				tmp = tmpparent;
+				tmpparent = tmpparent->parent;
+			}
+			return tmpparent;
+		}

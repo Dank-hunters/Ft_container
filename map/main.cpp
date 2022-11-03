@@ -33,26 +33,24 @@ int main()
 {
 	ft::tree<int> tamere;
 
-	tamere.insert(25);
-	tamere.insert(22);
-	tamere.insert(23);
-	tamere.insert(5);
-	tamere.insert(7);
+	tamere.insert(1);
+	tamere.insert(13);
+	tamere.insert(8);
+	tamere.insert(3);
+	tamere.insert(28);
+	tamere.insert(19);
+	tamere.insert(9);
+	tamere.insert(10);
 	tamere.insert(12);
-	tamere.insert(26);
-	tamere.insert(2545);
-	tamere.insert(2895);
-	tamere.insert(278535);
-	tamere.insert(27685);
-	tamere.insert(25178);
-	tamere.insert(275);
-	tamere.insert(2565);
-	tamere.insert(2215);
-	tamere.insert(225);
-	tamere.insert(2538);
-	tamere.insert(257);
-	tamere.insert(25777);
-	tamere.erase(25777);
+	tamere.insert(5);
+	tamere.insert(25);
+	tamere.insert(21);
+	tamere.insert(21);
+	tamere.insert(3);
+	tamere.insert(27);
+	tamere.insert(29);
+	
+	tamere.erase(28);
 	printHelper(tamere.get_root(), "", true, true);
 
 }
