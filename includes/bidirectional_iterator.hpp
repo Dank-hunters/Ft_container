@@ -60,7 +60,25 @@ namespace ft
                         _it = _it->prev();
                         return tmp;
                 }
+        bool operator == (const bidirectional_iterator &other) const
+		{
+			return _it == other._it;
+		}
 
+		bool operator != (const bidirectional_iterator &other) const
+		{
+			return _it != other._it;
+		}
+
+		reference operator * (void) const
+		{
+			return _it->val;
+		}
+
+		pointer operator -> (void) const
+		{
+			return &_it->val;
+		}
     };
 
 }
