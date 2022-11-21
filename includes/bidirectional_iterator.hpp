@@ -1,7 +1,7 @@
 #pragma once
 #include <iterator>
 #include "iterator_traits.hpp"
-#include "map/tree.hpp"
+#include "../map/tree.hpp"
 
 namespace ft
 {
@@ -27,14 +27,14 @@ namespace ft
             bidirectional_iterator &operator=(const bidirectional_iterator &copy)
                 {
                 }
-                operator _const() const { return _const(_it);}
+               // operator _const() const { return _const(_it);}
 
 
-                pointer operator->() const { return _it->val; }
-                reference operator*() const { return *_it->val; }
+             //   pointer operator->() const { return _it->val; }
+              //  reference operator*() const { return *_it->val; }
 
-                bool operator==(const _const &it) const { return _it == it.operator->(); }
-                bool operator!=(const _const &it) const { return _it != it.operator->(); }
+               // bool operator==(const bidirectional_iterator &it) const { return _it == it.operator->(); }
+              //  bool operator!=(const bidirectional_iterator &it) const { return _it != it.operator->(); }
 
                 bidirectional_iterator &operator++()
                 {
@@ -49,12 +49,12 @@ namespace ft
                         return tmp;
                 }
 
-                random_access_iterator &operator--()
+                bidirectional_iterator &operator--()
                 {
                         return *_it->prev();
                 }
 
-                random_access_iterator operator--(int)
+                bidirectional_iterator operator--(int)
                 {
                         bidirectional_iterator tmp = _it;
                         _it = _it->prev();

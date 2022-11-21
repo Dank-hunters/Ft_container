@@ -1,4 +1,5 @@
 #include "tree.hpp"
+#include "map.hpp"
 #include <iostream>
 
 void printHelper(ft::tree<int>::node_ptr root, std::string indent, bool last, bool first) 
@@ -32,9 +33,9 @@ void printHelper(ft::tree<int>::node_ptr root, std::string indent, bool last, bo
 
 int main()
 {
-	ft::tree<int> tamere;
+	ft::map<char, int> tamere;
 
-	tamere.insert(1);
+	/*tamere.insert(1);
 	tamere.insert(13);
 	tamere.insert(8);
 	tamere.insert(2);
@@ -54,12 +55,11 @@ int main()
 	tamere.insert(27);
 	tamere.insert(29);
 	
-	//for (int i = 1; i <= 29; i++)
-	//{
-	//	dprintf(1, "%i\n", i);
-	 tamere.erase(1);
-		/* code */
-	//}
+	for (int i = 1; i <= 29; i++)
+	{
+		tamere.erase(i);
+		dprintf(1, "%i\n", i);
+		i++;
+	}
 	printHelper(tamere.get_root(), "", true, true);
-
-}
+*/}

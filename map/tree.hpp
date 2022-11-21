@@ -18,10 +18,11 @@ namespace ft
 		Node            *right;    
 		Node            *daddy;    
 		value_type      val;
+		int 			height;
 		
 
 
-		Node(const value_type &val): left(NULL), right(NULL), daddy(NULL), val(val){} 
+		Node(const value_type &val): left(NULL), right(NULL), daddy(NULL), val(val), height(1){} 
 
 		Node	*mini(Node *search)
 		{
@@ -70,6 +71,11 @@ namespace ft
 			}
 			return p;
 		}
+		static int	get_height(Node* node) {
+			if (node == NULL)
+				return (0);
+			return (node->height);
+		}
 	};
 
 
@@ -84,10 +90,10 @@ namespace ft
 			typedef Node<value_type>										node_value;
 			typedef Node<value_type>										*node_ptr;
 			typedef size_t 													size_type;
-			typedef std::__is_bidirectional_iterator<node_value>			iterator;
-			typedef std::__is_bidirectional_iterator<const node_value>		const_iterator;
-			typedef ft::reverse_iterator<iterator>							reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+	//		typedef std::__is_bidirectional_iterator<node_value>			iterator;
+		//	typedef std::__is_bidirectional_iterator<const node_value>		const_iterator;
+			//typedef ft::reverse_iterator<iterator>							reverse_iterator;
+			//typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 	private:
 			allocator_type													_alloc;	
 			compare_type													_compare;
@@ -116,8 +122,117 @@ namespace ft
 			return(node);
 		}
 		public :
+			static int	get_height(node_ptr node) {
+			if (node == NULL)
+				return (0);
+			return (node->height);
+		}
+
+	node_ptr	left_rotation(node_ptr node) {
+			if (node == NULL)
+				return (node);
+
+			node_ptr	y = node->right;
+			node_ptr	t2 = y->left;
+
+			node->right = t2;
+			y->left = node;
+
+			if (node == _root)
+				_root = y;
+
+			y->daddy = node->daddy;
+			if (node == node->daddy->left)
+				node->daddy->left = y;
+			else
+				node->daddy->right = y;
+			if (t2)
+				t2->daddy = node;
+			node->daddy = y;
+
+			node->height = 1 + std::max(get_height(node->left), get_height(node->right));
+			y->height = 1 + std::max(get_height(y->left), get_height(y->right));
+
+			return (y);
+		}
+
+node_ptr	right_rotation(node_ptr node) {
+			if (node == NULL)
+				return (node);
+
+			node_ptr	y = node->left;
+			node_ptr	t3 = y->right;
+			if (node == _root)
+				_root = y;
+
+			y->daddy = node->daddy;
+			if (node == node->daddy->left)
+				node->daddy->left = y;
+			else
+				node->daddy->right = y;
+			if (t3)
+				t3->daddy = node;
+			node->left = t3;
+			y->right = node;
+
+			node->daddy = y;
+
+			node->height = 1 + std::max(get_height(node->left), get_height(node->right));
+			y->height = 1 + std::max(get_height(y->left), get_height(y->right));
+
+			return (y);
+		}
 
 
+
+int	get_balance_factor(node_ptr node) {
+			if (node == NULL)
+				return (0);
+			return (get_height(node->left) - get_height(node->right));
+		}
+
+
+node_ptr	balance_tree(node_ptr& node) {
+			int	balance = get_balance_factor(node);
+
+			if (node == NULL)
+				return (node);
+			if (balance > 1 && get_balance_factor(node->left) == 1) {
+				node = right_rotation(node);
+				return (node);
+			}
+
+			if (balance < -1 && get_balance_factor(node->right) == -1) {
+				node = left_rotation(node);
+				return (node);
+			}
+
+			if (balance > 1 && get_balance_factor(node->left) == -1) {
+				node->left = left_rotation(node->left);
+				node = right_rotation(node);
+				return (node);
+			}
+
+			if (balance < -1 && get_balance_factor(node->right) == 1) {
+				node->right = right_rotation(node->right);
+				node = left_rotation(node);
+				return (node);
+			}
+
+			return (node);
+
+}
+
+void	do_balance(node_ptr node) {
+			if (node == NULL)
+				return ;
+			while (node != _root) 
+			{
+				node->height = 1 + std::max(get_height(node->left), get_height(node->right));
+				balance_tree(node);
+				node = node->daddy;
+			}
+		}
 
 
 		/*ft::pair<iterator,bool>*/ void insert (const value_type &val)
@@ -144,8 +259,11 @@ namespace ft
 				prev->right = node;
 			else 
 				_root = node;
+			do_balance(node);
 			//return(ft::make_pair(iterator((node), _root), true));
 			}
+
+
 			void	_destroy_node(node_ptr &node)
 			{
 						_alloc.destroy(node);
@@ -159,33 +277,41 @@ namespace ft
 							_root = NULL;
 						}
 			}
+
+
+		node_ptr root()
+		{
+			return(_root);
+		}
 		size_type erase (const value_type& val)
 		{
 			node_ptr	cursor = _root;
-			/*if (!_compare(val, _root->val) && !_compare(_root->val, val))
+			if (!_compare(val, _root->val) && !_compare(_root->val, val))
 			{
 				node_ptr tm;
 				if (cursor->left)
 					tm = cursor->mini(cursor);
 				else 
 					tm = cursor->mini(cursor->right);
+				tm->daddy->left = NULL;
 				_root = tm;
 				_root->daddy = NULL;
 				if (cursor->left)
 				{
-				dprintf(1, "%i\n", tm->val);
+				//dprintf(1, "%i\n", tm->val);
 					_root->left = cursor->left;
 					cursor->left->daddy = _root;
 				}
 				if (cursor->right)
 				{
-				dprintf(1, "%i\n", cursor->val);
+			//	dprintf(1, "%i\n", cursor->val);
 					_root->right = cursor->right;
 					cursor->right->daddy = _root;
 				}
-				return(1);
-			}*/
+				_destroy_node(cursor);
 
+				return(1);
+			}
 			node_ptr	prev = NULL;
 			while (cursor)
 			{
@@ -234,8 +360,6 @@ namespace ft
 							cursor->left->daddy = tmp;
 							cursor->right->daddy = tmp;
 						}
-						_destroy_node(cursor);
-
 					}
 					else if (cursor->left && !cursor->right)
 					{
@@ -244,7 +368,6 @@ namespace ft
 						else
 							cursor->daddy->left = cursor->right;
 						cursor->left->daddy = cursor->daddy;
-						_destroy_node(cursor);
 
 					}
 					else if (cursor->right && !cursor->left)
@@ -254,7 +377,6 @@ namespace ft
 						else
 							cursor->daddy->left = cursor->right;
 						cursor->right->daddy = cursor->daddy;
-						_destroy_node(cursor);	
 					}
 					else
 					{
@@ -262,11 +384,14 @@ namespace ft
 							cursor->daddy->left = NULL;
 						else
 							cursor->daddy->right = NULL;
-						_destroy_node(cursor);
 					}
+						do_balance(cursor->daddy);
+						_destroy_node(cursor);
+
 					return(1);
 				}
 			}
+			
 			return (0);
 		}
 
