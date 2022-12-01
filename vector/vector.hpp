@@ -465,6 +465,8 @@ namespace ft
 
 				reference operator[] (size_type n)
 				{
+					if (n >= size())
+						throw std::out_of_range("vector");
 					return _start[n];
 				}
 				

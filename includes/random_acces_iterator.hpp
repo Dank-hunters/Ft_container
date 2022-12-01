@@ -8,12 +8,12 @@ namespace ft
         class random_access_iterator
         {
         public:
-                typedef _T                                                              value_type;
-                typedef _T                                                              *pointer;
-                typedef _T                                                              &reference;
-                typedef ptrdiff_t                                                       difference_type;
-                typedef ft::iterator_traits<_T>                                         iterator_category;
-                typedef random_access_iterator<const _T, const _T&, const _T*>          _const;
+                typedef _T value_type;
+                typedef _T *pointer;
+                typedef _T &reference;
+                typedef ptrdiff_t difference_type;
+                typedef ft::iterator_traits<_T> iterator_category;
+                typedef random_access_iterator<const _T, const _T&, const _T*> _const;
         private:
                 pointer _it;
         public:
@@ -35,7 +35,7 @@ namespace ft
 
                 bool operator==(const _const &it) const { return _it == it.operator->(); }
                 bool operator!=(const _const &it) const { return _it != it.operator->(); }
-                
+
                 bool operator<(const _const &it) const { return _it < it.operator->(); }
                 bool operator>(const _const &it) const { return _it > it.operator->(); }
                 bool operator<=(const _const &it) const { return _it <= it.operator->(); }
@@ -67,15 +67,15 @@ namespace ft
                         return tmp;
                 }
 
-                random_access_iterator operator+(const difference_type &n) const 
+                random_access_iterator operator+(const difference_type &n) const
                 {
-                        return random_access_iterator(_it + n); 
+                        return random_access_iterator(_it + n);
                 };
-
-	        random_access_iterator operator+(const difference_type n, const random_access_iterator &x)
+               /* difference_type operator+(const random_access_iterator &it)
                 {
-                         return random_access_iterator(x._it + n);
-                }
+                        return _it + it.operator->();
+                };*/
+	        friend random_access_iterator operator+(const difference_type n, const random_access_iterator &x) { return random_access_iterator(x._it + n); }
 
 
                 difference_type	operator - (const _const &other) const
@@ -101,6 +101,8 @@ namespace ft
                 {
                         return _it[n];
                 };
-                
+
         };
+      /*  template < class _T>
+        bool operator!=(const random_access_iterator<_T, _T&, _T*> &lhs, const random_access_iterator<_T, _T&, _T*> &rhs) { return lhs != rhs; }*/
 }

@@ -1,10 +1,13 @@
 #pragma once
 #include <memory>
 #include <iterator>
+#include <algorithm>
 #include "../includes/iterator_vector.hpp"
 #include "../includes/enable_if.hpp"
 #include "../includes/compare.hpp"
 #include "../includes/reverse_iterator.hpp"
+#include "../includes/bidirectional_iterator.hpp"
+
 #include "../includes/pair.hpp"
 namespace ft
 {
@@ -90,10 +93,10 @@ namespace ft
 			typedef Node<value_type>										node_value;
 			typedef Node<value_type>										*node_ptr;
 			typedef size_t 													size_type;
-	//		typedef std::__is_bidirectional_iterator<node_value>			iterator;
-		//	typedef std::__is_bidirectional_iterator<const node_value>		const_iterator;
-			//typedef ft::reverse_iterator<iterator>							reverse_iterator;
-			//typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+	 typedef ft::bidirectional_iterator<T>                       iterator;    
+				typedef ft::const_bidirectional_iterator<T>                       const_iterator;
+                typedef  ft::reverse_iterator<iterator>                     reverse_iterator;    
+				typedef  ft::reverse_iterator<const_iterator>               const_reverse_iterator;
 	private:
 			allocator_type													_alloc;	
 			compare_type													_compare;
@@ -250,6 +253,7 @@ void	do_balance(node_ptr node) {
 				else
 					return;// (ft::make_pair(iterator(cursor, _root), false));
 			}
+
 			node_ptr node = new_node(val);
 			_size++;
 			node->daddy = prev;
@@ -286,7 +290,7 @@ void	do_balance(node_ptr node) {
 		size_type erase (const value_type& val)
 		{
 			node_ptr	cursor = _root;
-			if (!_compare(val, _root->val) && !_compare(_root->val, val))
+		/*	if (!_compare(val, _root->val) && !_compare(_root->val, val))
 			{
 				node_ptr tm;
 				if (cursor->left)
@@ -311,7 +315,7 @@ void	do_balance(node_ptr node) {
 				_destroy_node(cursor);
 
 				return(1);
-			}
+			}*/
 			node_ptr	prev = NULL;
 			while (cursor)
 			{

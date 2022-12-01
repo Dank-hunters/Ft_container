@@ -1,45 +1,23 @@
-#include "tree.hpp"
+//#include "map.hpp"
+#include <map>
 #include "map.hpp"
 #include <iostream>
-
-void printHelper(ft::tree<int>::node_ptr root, std::string indent, bool last, bool first) 
-		{
-		    if (root != nullptr) 
-			{
-		        std::cout<<indent;
-		        if (first) {
-		            std::cout<<"Root-";
-		            indent += "     ";
-		        }
-		        else if (last) {
-		            std::cout<<"R----";
-		            indent += "     ";
-		        }
-		        else {
-		            std::cout<<"L----";
-		            indent += "|    ";
-		        }
-
-				std::cout << "(" << root->val << ")" << std::endl;
-		        printHelper(root->left, indent, false, false);
-				//exit(0);
-		        printHelper(root->right, indent, true, false);
-		        if (first)
-		            std::cout << std::endl;
-		    }
-		    else if (first)
-		        std::cout << "NULL" << std::endl << std::endl;
-		}
+#include "../includes/pair.hpp"
+//#include "tree.hpp"
+#include <iostream>
 
 int main()
 {
-	ft::map<char, int> tamere;
+	std::map<std::string, int> tamere;
+	ft::map<std::string, int> tamere2;
 
-	/*tamere.insert(1);
-	tamere.insert(13);
-	tamere.insert(8);
-	tamere.insert(2);
-	tamere.insert(28);
+	tamere2.insert(ft::make_pair<std::string, int>("lol", 15));
+	tamere.insert(std::make_pair<std::string, int>("loli", 7));
+	tamere.insert(std::make_pair<std::string, int>("lolu", 12));
+	//tamere.insert(13);
+	//tamere.insert(8);
+	//tamere.insert(28);
+	/*tamere.insert(2);
 	tamere.insert(5);
 	tamere.insert(19);
 	tamere.insert(9);
@@ -53,13 +31,14 @@ int main()
 	tamere.insert(21);
 	tamere.insert(3);
 	tamere.insert(27);
-	tamere.insert(29);
-	
-	for (int i = 1; i <= 29; i++)
+	tamere.insert(29);*/
+	/*
+	for (std::map<std::tring, int>::iterator i = tamere.begin(); ; i++)
 	{
-		tamere.erase(i);
 		dprintf(1, "%i\n", i);
-		i++;
-	}
-	printHelper(tamere.get_root(), "", true, true);
-*/}
+	}*/
+	// tamere.erase(15);
+	std::map<std::string, int>::iterator it = tamere.begin();
+	std::cout << it->first << std::endl;
+
+}
