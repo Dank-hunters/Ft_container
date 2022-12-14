@@ -1,22 +1,7 @@
 #include "../vector/vector.hpp"
 
 
-/*
-void printSize(TESTED_NAMESPACE::vector<TESTED_TYPE> &vec)
-{  
- 				//	std::cout << "_start = " << *vec.begin() << std::endl;
-					std::cout << "capacity : " << vec.capacity() << std::endl;
-					std::cout << "size : " << vec.size() << std::endl;
-					std::cout << "content :" << std::endl;
-					
-					TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator tmp = vec.begin();
-					
-					while (tmp != vec.end())
-					{
-						std::cout << *tmp++ << std::endl;
-					}
 
-}*/
 void	printSize(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct, bool print_content = true)
 {
 	const TESTED_TYPE size = vct.size();
@@ -47,8 +32,8 @@ void	cmp(const TESTED_NAMESPACE::vector<T, Alloc> &lhs, const TESTED_NAMESPACE::
 	std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
 	std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
 }
-/*
-int		main(void)
+
+void iterator_test(void)
 {
 	const int size = 5;
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
@@ -88,9 +73,8 @@ int		main(void)
 	std::cout << *it-- << std::endl;
 	std::cout << *--it << std::endl;
 
-	return (0);
-}*//*
-int		main(void)
+}
+void	insert_test(void)
 {
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct2;
@@ -124,9 +108,8 @@ int		main(void)
 	vct3.insert(vct3.begin() + 1, 2, 111);
 	printSize(vct3);
 
-	return (0);
-}*//*
-int		main(void)
+}
+void	at_test(void)
 {
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(7);
 
@@ -152,9 +135,8 @@ int		main(void)
 	catch (std::exception &e) {
 		std::cout << "Catch exception: " << e.what() << std::endl;
 	}
-	return (0);
-}*//*
-int		main(void)
+}
+void	it_test(void)
 {
 	const int size = 5;
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
@@ -180,78 +162,7 @@ int		main(void)
 	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
 
 	printSize(vct, true);
-	return (0);
-}*//*
-int		main(void)
-{
-	const int size = 5;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
-
-	for (int i = 0; i < size; ++i)
-		it[i] = (size - i) * 5;
-
-	it = it + 5;
-	it = 1 + it;
-	it = it - 4;
-	std::cout << *(it += 2) << std::endl;
-	std::cout << *(it -= 1) << std::endl;
-
-	*(it -= 2) = 42;
-	*(it += 2) = 21;
-
-	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
-
-	std::cout << "(it == const_it): " << (ite == it) << std::endl;
-	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
-	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
-
-	printSize(vct, true);
-	return (0);
-}*//*
-int		main(void)
-{
-	const int size = 5;
-	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(vct.rbegin());
-	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(vct.rend());
-
-	for (int i = 1; it != ite; ++i)
-		*it++ = (i * 7);
-	printSize(vct, 1);
-
-	it = vct.rbegin();
-	ite = vct.rbegin();
-
-	std::cout << *(++ite) << std::endl;
-	std::cout << *(ite++) << std::endl;
-	std::cout << *ite++ << std::endl;
-	std::cout << *++ite << std::endl;
-
-//	it->m();
-	//ite->m();
-
-	std::cout << *(++it) << std::endl;
-	std::cout << *(it++) << std::endl;
-	std::cout << *it++ << std::endl;
-	std::cout << *++it << std::endl;
-
-	std::cout << *(--ite) << std::endl;
-	std::cout << *(ite--) << std::endl;
-	std::cout << *--ite << std::endl;
-	std::cout << *ite-- << std::endl;
-
-	//(*it).m();
-	//(*ite).m();
-
-	std::cout << *(--it) << std::endl;
-	std::cout << *(it--) << std::endl;
-	std::cout << *it-- << std::endl;
-	std::cout << *--it << std::endl;
-
-	return (0);
-}*/
+}
 template <typename Ite_1, typename Ite_2>
 void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
 {
@@ -263,7 +174,7 @@ void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
 		ft_eq_ope(second, first, 0);
 }
 
-int		main(void)
+void	ope_test(void)
 {
 	const int size = 5;
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
@@ -303,5 +214,14 @@ int		main(void)
 	ft_eq_ope(it_1 - 3, cit_mid);
 	ft_eq_ope(it_mid, cit_1 - 3);
 
-	return (0);
+}
+
+int main()
+{
+	iterator_test();
+	insert_test();
+	at_test();
+	ope_test();
+
+	return(0);
 }

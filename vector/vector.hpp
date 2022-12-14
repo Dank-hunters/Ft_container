@@ -145,7 +145,6 @@ namespace ft
 						tmp++;
 						i++;
 					}
-					//_end--;
 					return(first);
 				}
 			public :

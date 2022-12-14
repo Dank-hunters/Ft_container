@@ -32,8 +32,8 @@ void	printSize(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct, bool print_cont
 	std::cout << "###############################################" << std::endl;
 }
 
-/*
-int		main(void)
+
+void pop_test(void)
 {
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 
@@ -58,8 +58,7 @@ int		main(void)
 	vct.pop_back();
 	vct.pop_back();
 	vct.pop_back();
-	return (0);
-}*/
+}
 void	checkErase(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct,
 					TESTED_NAMESPACE::vector<TESTED_TYPE>::const_iterator const &it)
 {
@@ -68,7 +67,7 @@ void	checkErase(TESTED_NAMESPACE::vector<TESTED_TYPE> const &vct,
 	printSize(vct);
 }
 
-int		main(void)
+void erase_and_push(void)
 {
 	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(10);
 
@@ -96,5 +95,11 @@ int		main(void)
 	printSize(vct);
 	checkErase(vct, vct.erase(vct.begin(), vct.end()));
 
-	return (0);
+}
+
+int main()
+{
+	pop_test();
+	erase_and_push();
+	return(0);
 }
