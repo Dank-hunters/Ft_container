@@ -48,13 +48,24 @@ printHelper(tamere.get_root(), "", true, true);
 printHelper(tamere.get_root(), "", true, true);
 	tamere.insert(ft::make_pair<int, int>(75, 75));
 printHelper(tamere.get_root(), "", true, true);
-	tamere.insert(ft::make_pair<int, int>(100, 100));
+	tamere.insert(ft::make_pair<int, int>(15, 15));
 printHelper(tamere.get_root(), "", true, true);
-	tamere.insert(ft::make_pair<int, int>(60, 60));
+	tamere.insert(ft::make_pair<int, int>(40, 40));
 printHelper(tamere.get_root(), "", true, true);
 //	tamere.settruc();
-	tamere.insert(ft::make_pair<int, int>(65, 65));
+	tamere.insert(ft::make_pair<int, int>(60, 60));
 printHelper(tamere.get_root(), "", true, true);
-tamere.erase(60);	
+	tamere.insert(ft::make_pair<int, int>(80, 80));
+	tamere.insert(ft::make_pair<int, int>(35, 35));
+	tamere.insert(ft::make_pair<int, int>(55, 55));
+	tamere.insert(ft::make_pair<int, int>(65, 65));
+	tamere.insert(ft::make_pair<int, int>(90, 90));
+	tamere.insert(ft::make_pair<int, int>(62, 62));
+tamere.erase(115153205);	
+printHelper(tamere.get_root(), "", true, true);/*
+tamere.erase(50);	
+printHelper(tamere.get_root(), "", true, true);
+tamere.erase(100);	
+printHelper(tamere.get_root(), "", true, true);*/
 
 }

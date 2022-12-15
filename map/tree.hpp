@@ -268,7 +268,7 @@ void	do_balance(node_ptr node) {
 				prev->right = node;
 			else 
 				_root = node;
-			balancing(node);
+			balancing(node->daddy);
 			//return(ft::make_pair(iterator((node), _root), true));
 			}
 
@@ -290,7 +290,10 @@ void	do_balance(node_ptr node) {
 		size_type erase (const key_type& val)
 		{
 		node_ptr    current;
+		node_ptr    current_daddy;
+
         int            direction;
+		current_daddy = NULL; 
 
         current = _root;
         direction = 0;
@@ -301,9 +304,14 @@ void	do_balance(node_ptr node) {
             else if (_compare(current->val.first, val) && (direction = 2))
                 current = current->right;
             else
-                current = oblitarate(current, direction);
-        }
-		//rotate()
+                {
+					current_daddy = current->daddy; 
+					current = oblitarate(current, direction);
+					balancing(current_daddy);
+				}
+		}
+			//	std::cout << current_daddy->val.second << std::endl;
+
 		return(0);
 		}
 			
@@ -507,22 +515,14 @@ void	do_balance(node_ptr node) {
 	{
 		_truc = 1;
 	}
-	void	balancing(node_ptr new_one)
+	void	balancing(node_ptr current)
 	{
-		node_ptr	current;
-		int		left_height;
-		int		right_height;
+		int		left_height = 0;
+		int		right_height = 0;
 		int		factor;
 
-		current = NULL;
-		if (new_one->daddy != NULL)
-			current = new_one->daddy;
-		if (current != NULL && current->daddy != NULL)
-			current = current->daddy;
 		while (current != NULL)
 		{
-			left_height = 0;
-			right_height = 0;
 			if (current->left != NULL)
 				left_height = 1 + get_sub_height(current->left);
 			if (current->right != NULL)
