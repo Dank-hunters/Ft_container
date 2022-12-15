@@ -7,7 +7,7 @@
 #include <iostream>
 
 //void printHelper(ft::tree<std::string, int>::node_ptr root, std::string indent, bool last, bool first) 
-void printHelper(ft::tree<std::string, int>::node_ptr root, std::string indent, bool last, bool first) 
+void printHelper(ft::tree<int, int>::node_ptr root, std::string indent, bool last, bool first) 
         {
             if (root != nullptr) 
             {
@@ -39,61 +39,22 @@ void printHelper(ft::tree<std::string, int>::node_ptr root, std::string indent, 
 int main()
 {
 //	ft::map<std::string, int> tamere;
-	ft::tree<std::string, int> tamere;
+	//ft::tree<std::string, int> tamere;
+	ft::tree<int, int> tamere;
 
-	tamere.insert(ft::make_pair<std::string, int>("lol", 15));
-	tamere.insert(ft::make_pair<std::string, int>("lo", 18));
-	tamere.insert(ft::make_pair<std::string, int>("loli", 7));
-	tamere.insert(ft::make_pair<std::string, int>("loly", 5));
-	tamere.insert(ft::make_pair<std::string, int>("lold", 122));
-	tamere.insert(ft::make_pair<std::string, int>("loldsf", 132));
-	tamere.insert(ft::make_pair<std::string, int>("lolagau", 72));
-	tamere.insert(ft::make_pair<std::string, int>("loqwlu", 646));
-	tamere.insert(ft::make_pair<std::string, int>("loertlu", 55));
-	tamere.insert(ft::make_pair<std::string, int>("lolru", 1));
-	//tamere.insert(13);
-	//tamere.insert(8);
-tamere.erase("lol");
-tamere.erase("lo");
-tamere.erase("loli");
-tamere.erase("loly");
-tamere.erase("lold");
-tamere.erase("lolagau");
-tamere.erase("lolru");
-tamere.erase("loldsf");
-tamere.erase("loqwlu");
-tamere.erase("loertlu");
-
-/*
-	tamere.insert(ft::make_pair<std::string, int>("lolru", 1));
-*/
-//tamere.erase(ft::make_pair<std::string, int>("lolu", 12));
-//tamere.erase(ft::make_pair<std::string, int>("loli", 12));
+	tamere.insert(ft::make_pair<int, int>(50, 50));
 printHelper(tamere.get_root(), "", true, true);
-
-	//tamere.insert(28);
-	/*tamere.insert(2);
-	tamere.insert(5);
-	tamere.insert(19);
-	tamere.insert(9);
-	tamere.insert(6);
-	tamere.insert(10);
-	tamere.insert(12);
-	tamere.insert(5);
-	tamere.insert(9);
-	tamere.insert(7);
-	tamere.insert(21);
-	tamere.insert(21);
-	tamere.insert(3);
-	tamere.insert(27);
-	tamere.insert(29);*/
-	/*
-	for (std::map<std::tring, int>::iterator i = tamere.begin(); ; i++)
-	{
-		dprintf(1, "%i\n", i);
-	}*/
-	// tamere.erase(15);
-//	std::map<std::string, int>::iterator it = tamere.begin();
-//	std::cout << it->first << std::endl;
+	tamere.insert(ft::make_pair<int, int>(25, 25));
+printHelper(tamere.get_root(), "", true, true);
+	tamere.insert(ft::make_pair<int, int>(75, 75));
+printHelper(tamere.get_root(), "", true, true);
+	tamere.insert(ft::make_pair<int, int>(100, 100));
+printHelper(tamere.get_root(), "", true, true);
+	tamere.insert(ft::make_pair<int, int>(60, 60));
+printHelper(tamere.get_root(), "", true, true);
+//	tamere.settruc();
+	tamere.insert(ft::make_pair<int, int>(65, 65));
+printHelper(tamere.get_root(), "", true, true);
+tamere.erase(60);	
 
 }

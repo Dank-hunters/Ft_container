@@ -101,6 +101,7 @@ namespace ft
                 typedef  ft::reverse_iterator<iterator>                     reverse_iterator;    
 				typedef  ft::reverse_iterator<const_iterator>               const_reverse_iterator;*/
 	private:
+			int _truc;
 			allocator_type													_alloc;	
 			compare_type													_compare;
 			node_ptr														_root;
@@ -108,7 +109,7 @@ namespace ft
 	public :
 		
 		
-		tree(const compare_type &comp = compare_type(), const allocator_type &alloc = allocator_type()) : _alloc(alloc), _compare(comp), _root(NULL), _size(0)
+		tree(const compare_type &comp = compare_type(), const allocator_type &alloc = allocator_type()) : _truc(0), _alloc(alloc), _compare(comp), _root(NULL), _size(0)
 		{}        
 	/*	tree(const tree &x): _alloc(NULL), _compare(NULL), _root(NULL), _size(0)
 		{
@@ -128,7 +129,7 @@ namespace ft
 			return(node);
 		}
 		public :
-			static int	get_height(node_ptr node) {
+/*			static int	get_height(node_ptr node) {
 			if (node == NULL)
 				return (0);
 			return (node->height);
@@ -238,7 +239,7 @@ void	do_balance(node_ptr node) {
 				balance_tree(node);
 				node = node->daddy;
 			}
-		}
+		}*/
 
 
 		/*ft::pair<iterator,bool>*/ void insert (const value_type &val)
@@ -267,150 +268,27 @@ void	do_balance(node_ptr node) {
 				prev->right = node;
 			else 
 				_root = node;
-			do_balance(node);
+			balancing(node);
 			//return(ft::make_pair(iterator((node), _root), true));
 			}
 
 
 			void	_destroy_node(node_ptr &node)
 			{
-					std::cout << "size :" << _size << std::endl;
 						_size--;
 						if (_size == 0)
 						{
-							_root->daddy = NULL;
-							_root->left = NULL;
-							_root->right = NULL;
+						//	_root->daddy = NULL;
+						//	_root->left = NULL;
+						//	_root->right = NULL;
 							_root = NULL;
 						}
 						_alloc.destroy(node);
 						_alloc.deallocate(node, sizeof(node));
 			}
 
-
-		node_ptr root()
-		{
-			return(_root);
-		}
 		size_type erase (const key_type& val)
 		{
-			//node_ptr	cursor = _root;
-			/*if (!_compare(val, _root->val.first) && !_compare(_root->val.first, val))
-			{
-				node_ptr tm;
-				if (cursor->left)
-					tm = cursor->mini(cursor);
-				else 
-					tm = cursor->mini(cursor->right);
-				_root = tm;
-				_root->daddy = NULL;
-				if (cursor->left)
-				{
-				//tm->daddy->right = NULL;
-				//tm->daddy->left = NULL;
-					//dprintf(1, "%i\n", tm->val);
-					_root->left = cursor->left;
-					cursor->left->daddy = _root;
-				}
-				if (cursor->right)
-				{
-					//dprintf(1, "%i\n", cursor->val);
-					_root->right = cursor->right;
-					cursor->right->daddy = _root;
-				}
-				_destroy_node(cursor);
-				return(1);
-			}*/
-			/*node_ptr	prev = NULL;
-				std::cout << "passage" << std::endl;
-			while (cursor)
-			{
-				prev = cursor;
-				if (_compare(val, cursor->val.first))
-					cursor = cursor->left;
-				else if (_compare(cursor->val.first, val))
-					cursor = cursor->right;
-				else
-				{
-					if (cursor->left && cursor->right)
-					{
-						node_ptr tmp = cursor->next();
-						if (tmp == cursor->right)
-						{
-							if (!cursor->daddy)
-								_root = tmp;
-							else if (cursor->daddy->right == cursor)
-								cursor->daddy->right = tmp;
-							else
-								cursor->daddy->left = tmp;
-							cursor->left->daddy = tmp;
-							tmp->daddy = cursor->daddy;
-							tmp->left = cursor->left;
-							tmp->daddy->right = NULL;
-						}
-						else
-						{
-							if (tmp->right)
-							{
-								tmp->daddy->left = tmp->right;
-								tmp->right->daddy = tmp->daddy;
-							}
-							if (!cursor->daddy)
-								_root = tmp;
-							else if(cursor->daddy->right == cursor)
-								cursor->daddy->right = tmp;
-							else
-								cursor->daddy->left = tmp;
-							if(tmp->daddy->right == cursor)
-								{
-									tmp->daddy->right = tmp->right;
-									tmp->right = NULL;
-								}
-							else
-								{std::cout << "niope" << std::endl;
-								tmp->daddy->left = tmp->left;
-								tmp->left = NULL;}
-							tmp->daddy = cursor->daddy;
-							tmp->left = cursor->left;
-							tmp->right = cursor->right;
-							cursor->left->daddy = tmp;
-							cursor->right->daddy = tmp;
-						}
-					}
-					else if (cursor->left && !cursor->right)
-					{
-						if (cursor->daddy->right == cursor)
-							cursor->daddy->right = cursor->left;
-						else
-							cursor->daddy->left = cursor->right;
-						cursor->left->daddy = cursor->daddy;
-
-					}
-					else if (cursor->right && !cursor->left)
-					{
-						if (cursor->daddy->right == cursor)
-							cursor->daddy->right = cursor->right;
-						else
-							cursor->daddy->left = cursor->right;
-						cursor->right->daddy = cursor->daddy;
-					}
-					else
-					{
-						if (cursor == _root)
-							;
-						else if (cursor->daddy->left == cursor)
-							cursor->daddy->left = NULL;
-						else
-							cursor->daddy->right = NULL;
-					}
-					//std::cout << "size :" << _size << std::endl;
-						//do_balance(cursor->daddy);
-						_destroy_node(cursor);
-					return(1);
-				}
-			}
-			
-			return (0);*/
 		node_ptr    current;
         int            direction;
 
@@ -425,6 +303,7 @@ void	do_balance(node_ptr node) {
             else
                 current = oblitarate(current, direction);
         }
+		//rotate()
 		return(0);
 		}
 			
@@ -489,7 +368,6 @@ void	do_balance(node_ptr node) {
         node_ptr prev;
 
         prev = current->daddy;
-		//std::cout << direction << std::endl;
         if (current->left == NULL && current->right == NULL)
 		{
 			if (_size != 1)
@@ -501,32 +379,221 @@ void	do_balance(node_ptr node) {
 				_destroy_node(current);
 		}
 		else if (current->left != NULL && current->right != NULL)
-            {
-				std::cout << "ici" << std::endl;
 				complex_oblitarate(current);
-			}
         else
-		{
-				std::cout << "la" << std::endl;
             single_oblitarate(current);
-		}
 		return (NULL);
     }
 
   
 
 
+	void	RR_rotate(node_ptr grandpa, node_ptr parent)
+	{
+		std::cout << "RR" << std::endl;
+		node_ptr	tie;
+		tie = grandpa->daddy;
+		grandpa->left = parent->right;
+		if (parent->right != NULL)
+			parent->right->daddy = grandpa;
+		parent->right = grandpa;
+		parent->daddy = tie;
+		grandpa->daddy = parent;
+		if (tie == NULL)
+		{
+			_root = parent;
+			return ;
+		}
+		if (tie->left == grandpa)
+			tie->left = parent;
+		else
+			tie->right = parent;
+
+	}
+
+	void	LL_rotate(node_ptr grandpa, node_ptr parent)
+	{
+		node_ptr	tie;
+
+		std::cout << "LL" << std::endl;
+			
+		tie = grandpa->daddy;
+		grandpa->right = parent->left;
+		if (parent->left != NULL)
+			parent->left->daddy = grandpa;
+		parent->left = grandpa;
+		parent->daddy = tie;
+		grandpa->daddy = parent;
+		if (tie == NULL)
+		{
+			_root = parent;
+			return ;
+		}
+		if (tie->left == grandpa)
+			tie->left = parent;
+		else
+			tie->right = parent;
+
+	}
+
+	void	LR_rotate(node_ptr grandpa, node_ptr parent, node_ptr child)
+	{
+		node_ptr	tie;
+		node_ptr	ltmp;
+		node_ptr	rtmp;
+
+		std::cout << "LR" << std::endl;
+
+		tie = grandpa->daddy;
+		ltmp = child->left;
+		rtmp = child->right;
+		child->left = parent;
+		child->right = grandpa;
+		parent->daddy = child;
+		parent->right = ltmp;
+		if (ltmp)
+			ltmp->daddy = parent;
+		grandpa->daddy = child;
+		grandpa->left = rtmp;
+		if (rtmp)
+			rtmp->daddy = grandpa;
+		if (tie == NULL)
+		{
+			_root = child;
+			child->daddy = NULL;
+			return ;
+		}
+		if (tie->left == grandpa)
+			tie->left = child;
+		else
+			tie->right = child;
+		child->daddy = tie;
+	}
+
+	void	RL_rotate(node_ptr grandpa, node_ptr parent, node_ptr child)
+	{
+		node_ptr	tie;
+		node_ptr	ltmp;
+		node_ptr	rtmp;
+		std::cout << "RL" << std::endl;
+
+		tie = grandpa->daddy;
+		ltmp = child->left;
+		rtmp = child->right;
+		child->left = grandpa;
+		child->right = parent;
+		parent->daddy = child;
+		parent->left = rtmp;
+		if (rtmp != NULL)
+			rtmp->daddy = parent;
+		grandpa->daddy = child;
+		grandpa->right = ltmp;
+		if (ltmp != NULL)
+			ltmp->daddy = grandpa;
+		if (tie == NULL)
+		{
+			_root = child;
+			child->daddy = NULL;
+			return ;
+		}
+		if (tie->left == grandpa)
+			tie->left = child;
+		else
+			tie->right = child;
+		child->daddy = tie;
+	}
+
+	void	settruc()
+	{
+		_truc = 1;
+	}
+	void	balancing(node_ptr new_one)
+	{
+		node_ptr	current;
+		int		left_height;
+		int		right_height;
+		int		factor;
+
+		current = NULL;
+		if (new_one->daddy != NULL)
+			current = new_one->daddy;
+		if (current != NULL && current->daddy != NULL)
+			current = current->daddy;
+		while (current != NULL)
+		{
+			left_height = 0;
+			right_height = 0;
+			if (current->left != NULL)
+				left_height = 1 + get_sub_height(current->left);
+			if (current->right != NULL)
+				right_height = 1 + get_sub_height(current->right);
+			factor = left_height - right_height;
+			if (factor > 1 || factor < -1)
+				choose_rotate(current, factor);
+			current = current->daddy;
+		}
+	}
+
+
+	void	choose_rotate(node_ptr current, int factor)
+    {
+        int        left_height;
+        int        right_height;
+
+        left_height = 0;
+        right_height = 0;
+        if (factor > 1)
+        {
+            if (current->left->left != NULL)
+                left_height = 1 + get_sub_height(current->left->left);
+            if (current->left->right != NULL)
+                right_height = 1 + get_sub_height(current->left->right);
+            factor = left_height - right_height;
+            if (factor > 0)
+                RR_rotate(current, current->left);
+            else
+                LR_rotate(current, current->left, current->left->right);
+
+        }
+        else
+        {
+            if (current->right->left != NULL)
+                left_height = 1 + get_sub_height(current->right->left);
+            if (current->right->right != NULL)
+                right_height = 1 + get_sub_height(current->right->right);
+            factor = left_height - right_height;
+            if (factor > 0)
+                RL_rotate(current, current->right, current->right->left);
+            else
+                LL_rotate(current, current->right);
+        }
+    }
+
+	int		get_sub_height(node_ptr current)
+	{
+		int		left_height;
+		int		right_height;
+
+		left_height = 0;
+		right_height = 0;
+		if (current == NULL)
+			return (0);
+		if (current->right != NULL)
+			++right_height += get_sub_height(current->right);
+		if (current->left != NULL)
+			++left_height += get_sub_height(current->left);
+		if (left_height > right_height)
+			return (left_height);
+		return (right_height);
+	}
+
 
 
 		node_ptr 	get_root()
-		{return(_root);}
-
-//		iterator insert (iterator position, const value_type& val);
-
+		{
+			return(_root);
+		}
 
 	};
 	
-
-	
-
 }
