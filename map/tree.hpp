@@ -118,129 +118,49 @@ namespace ft
 
 		~tree()
 		{
-		//clear();
+			if (_root)
+				clear_all(_root);
+			_destroy_node(_root);
 		}
 
 		private :
 		node_ptr	new_node(value_type const &val)
 		{
-			node_ptr node = _alloc.allocate(sizeof(node));
+			node_ptr node = _alloc.allocate(sizeof(node_ptr));
 			_alloc.construct(node, val);
 			return(node);
 		}
 		public :
-/*			static int	get_height(node_ptr node) {
-			if (node == NULL)
-				return (0);
-			return (node->height);
+
+		void	clear()
+		{
+			clear_all(_root);
 		}
-
-	node_ptr	left_rotation(node_ptr node) {
-			if (node == NULL)
-				return (node);
-
-			node_ptr	y = node->right;
-			node_ptr	t2 = y->left;
-
-			node->right = t2;
-			y->left = node;
-
-			if (node == _root)
-				_root = y;
-
-			y->daddy = node->daddy;
-			if (node == node->daddy->left)
-				node->daddy->left = y;
+		void clear_all(node_ptr	&tmp)
+		{
+			node_ptr	save = 0;
+				//std::cout << "deja ? " << tmp->val.second << std::endl;
+			if (tmp->left)
+				{
+					clear_all(tmp->left);
+				}
+			else if (tmp->right)
+				clear_all(tmp->right);
 			else
-				node->daddy->right = y;
-			if (t2)
-				t2->daddy = node;
-			node->daddy = y;
-
-			node->height = 1 + std::max(get_height(node->left), get_height(node->right));
-			y->height = 1 + std::max(get_height(y->left), get_height(y->right));
-
-			return (y);
-		}
-
-node_ptr	right_rotation(node_ptr node) {
-			if (node == NULL)
-				return (node);
-
-			node_ptr	y = node->left;
-			node_ptr	t3 = y->right;
-			if (node == _root)
-				_root = y;
-
-			y->daddy = node->daddy;
-			if (node == node->daddy->left)
-				node->daddy->left = y;
-			else
-				node->daddy->right = y;
-			if (t3)
-				t3->daddy = node;
-			node->left = t3;
-			y->right = node;
-
-			node->daddy = y;
-
-			node->height = 1 + std::max(get_height(node->left), get_height(node->right));
-			y->height = 1 + std::max(get_height(y->left), get_height(y->right));
-
-			return (y);
-		}
-
-
-
-int	get_balance_factor(node_ptr node) {
-			if (node == NULL)
-				return (0);
-			return (get_height(node->left) - get_height(node->right));
-		}
-
-
-node_ptr	balance_tree(node_ptr& node) {
-			int	balance = get_balance_factor(node);
-
-			if (node == NULL)
-				return (node);
-			if (balance > 1 && get_balance_factor(node->left) == 1) {
-				node = right_rotation(node);
-				return (node);
-			}
-
-			if (balance < -1 && get_balance_factor(node->right) == -1) {
-				node = left_rotation(node);
-				return (node);
-			}
-
-			if (balance > 1 && get_balance_factor(node->left) == -1) {
-				node->left = left_rotation(node->left);
-				node = right_rotation(node);
-				return (node);
-			}
-
-			if (balance < -1 && get_balance_factor(node->right) == 1) {
-				node->right = right_rotation(node->right);
-				node = left_rotation(node);
-				return (node);
-			}
-
-			return (node);
-
-}
-
-void	do_balance(node_ptr node) {
-			if (node == NULL)
-				return ;
-			while (node != _root) 
 			{
-				node->height = 1 + std::max(get_height(node->left), get_height(node->right));
-				balance_tree(node);
-				node = node->daddy;
-			}
-		}*/
+				save = tmp->daddy;
+				_alloc.destroy(tmp);
+				_alloc.deallocate(tmp, sizeof(node_ptr));
+				tmp = NULL;
 
+			}
+			if (save != _root)
+				{
+				clear_all(_root);
+				}
+			else 
+				return;
+		}
 
 		/*ft::pair<iterator,bool>*/ void insert (const value_type &val)
 		{
@@ -283,8 +203,9 @@ void	do_balance(node_ptr node) {
 						//	_root->right = NULL;
 							_root = NULL;
 						}
+
 						_alloc.destroy(node);
-						_alloc.deallocate(node, sizeof(node));
+						_alloc.deallocate(node, sizeof(node_ptr));
 			}
 
 		size_type erase (const key_type& val)
