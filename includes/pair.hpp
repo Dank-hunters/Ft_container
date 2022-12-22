@@ -1,13 +1,15 @@
 #pragma once
 namespace ft
 {
+
 template<class T1, class T2>
 struct pair
 {
+  public:
     typedef T1 first_type;
     typedef T2 second_type;
-    first_type  first;
-    second_type second;
+    T1  first;
+    T2 second;
     //CONSTRUCTOR/DESTRUCTOR
     
     pair() : first(), second(){}
@@ -28,16 +30,23 @@ struct pair
 };
 
     //OPERATOR =
-
-template <class T1, class T2>
+   /* template <class T1, class T2>
+    pair<T1, T2>& pair::operator= (const pair<T1, T2>& pr)
+    {
+      first = pr.first;
+      second = pr.second;
+      return *this;
+    }*/
+    template <class T1, class T2>
 pair<T1, T2>& pair<T1, T2> ::operator= (const pair& pr)
 {
-	/*if (this == pr)
+/*	if (this == pr)
 		return(*this);*/
   first = pr.first;
   second = pr.second;
   return *this;
 }
+
 
 //RELATIONAL OPERATOR
 template <class T1, class T2>

@@ -76,7 +76,7 @@ namespace ft
                         return _it + it.operator->();
                 };*/
 	        friend random_access_iterator operator+(const difference_type n, const random_access_iterator &x) { return random_access_iterator(x._it + n); }
-
+                //patch du cpp 98 pour pouvoir comparer des const et des non const, pas inscrit dans la 98 mais explicitement reparer par les devs
 
                 difference_type	operator - (const _const &other) const
 		{

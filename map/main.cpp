@@ -1,13 +1,13 @@
 //#include "map.hpp"
 #include <map>
-#include "map.hpp"
+//#include "map.hpp"
 #include <iostream>
 #include "../includes/pair.hpp"
 #include "tree.hpp"
 #include <iostream>
 
 //void printHelper(ft::tree<std::string, int>::node_ptr root, std::string indent, bool last, bool first) 
-void printHelper(ft::tree<int, int>::node_ptr root, std::string indent, bool last, bool first) 
+void printHelper(ft::tree<ft::pair<int, int> >::node_ptr root, std::string indent, bool last, bool first) 
         {
             if (root != nullptr) 
             {
@@ -40,7 +40,7 @@ int main()
 {
 //	ft::map<std::string, int> tamere;
 	//ft::tree<std::string, int> tamere;
-	ft::tree<int, int> tamere;
+	ft::tree<ft::pair<int, int> > tamere;
 
 	tamere.insert(ft::make_pair<int, int>(50, 50));
 printHelper(tamere.get_root(), "", true, true);
@@ -61,7 +61,8 @@ printHelper(tamere.get_root(), "", true, true);
 	tamere.insert(ft::make_pair<int, int>(65, 65));
 	tamere.insert(ft::make_pair<int, int>(90, 90));
 	tamere.insert(ft::make_pair<int, int>(62, 62));
-tamere.erase(115153205);	
+printHelper(tamere.get_root(), "", true, true);
+tamere.erase(ft::make_pair<int, int>(90, 90));	
 printHelper(tamere.get_root(), "", true, true);
 tamere.clear();
 printHelper(tamere.get_root(), "", true, true);

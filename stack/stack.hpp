@@ -1,12 +1,12 @@
 #pragma once
-#include <vector>
+#include "../vector/vector.hpp"
 #include <stack>
 #include <iostream>
 
 
 namespace ft
 {
-    template< class T, class Container = std::deque<T> > class stack
+    template< class T, class Container = ft::vector<T> > class stack
     {
 
     public:
