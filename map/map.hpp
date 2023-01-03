@@ -48,6 +48,7 @@ public:
 	typedef size_t                                              					size_type;
 	
 	typedef	tree<used_value_type, key_compare>								tree_type;
+	typedef	Node<used_value_type>								trees_type;
 private:
 
 	tree_type																		Avl;
@@ -60,11 +61,7 @@ public:
 	map():Avl(){}
 	~map(){}
 
-	/*ft::pair<iterator,bool>*/void insert (const used_value_type& val)
-	{
-		Avl.insert(val);
-		//return(ft::pair<iterator, bool>(val, true));
-	}
+
 	iterator begin()
 	{
 		return(Avl.begin());
@@ -88,7 +85,51 @@ public:
 	{
 		Avl.erase(val);
 	}
+	trees_type	*get_root()
+	{
+		return Avl.get_root();
+	}
+	bool empty() const
+	{
+		if (Avl.get_root() == NULL)
+			return(true);
+		return false;
+	}
+	size_type size() const
+	{
+		return Avl.size();
+	}
 
+
+
+
+	////////////////// modificateur ///////////////
+
+
+
+
+		pair<iterator,bool> insert (const value_type& val)
+		{
+			return(Avl.insert(val));
+		}
+		//iterator insert (iterator position, const value_type& val)
+		//{}
+
+		template <class InputIterator>  
+		void insert (InputIterator first, InputIterator last)
+		{
+			InputIterator tmp = first;
+
+			//Avl.insert(ft::make_pair<key_type, mapped_type>(tmp->first, tmp->second));
+
+			while(tmp != last)
+			{
+				Avl.insert(ft::make_pair<key_type, mapped_type>(tmp->first, tmp->second));
+				tmp++;
+
+			}
+
+		}
 
 };
 

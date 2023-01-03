@@ -24,7 +24,7 @@ namespace ft
 
 			bidirectional_iterator	&operator=(const bidirectional_iterator &copy); // avoir si le dereferencement est gerer
 
-			bool	operator==(const const_it &rhs) const;
+			bool	operator==(const bidirectional_iterator &rhs) const;
 			bool	operator!=(const bidirectional_iterator &rhs) const;
 
 			reference	operator*() const;
@@ -55,7 +55,7 @@ namespace ft
 	}
 
 	template <class T>
-	bidirectional_iterator<T>::bidirectional_iterator(elem_type *copy) : _it(copy), _pair(&copy->val)
+	bidirectional_iterator<T>::bidirectional_iterator(elem_type *copy) : _it(copy), _pair(copy->get_pair())
 	{
 
 	}
@@ -75,7 +75,7 @@ namespace ft
 	}
 
 	template <class T>
-	bool	bidirectional_iterator<T>::operator==(const const_it &rhs) const
+	bool	bidirectional_iterator<T>::operator==(const bidirectional_iterator &rhs) const
 	{
 		return (_pair == rhs.operator->());
 	}
@@ -89,24 +89,19 @@ namespace ft
 	template <class T>
 	typename bidirectional_iterator<T>::reference	bidirectional_iterator<T>::operator*() const //nop
 	{
-		if (_it->print == 0)
-			return(NULL);
 		return (*_pair);
 	}
 
 	template <class T>
 	typename bidirectional_iterator<T>::pointer	bidirectional_iterator<T>::operator->() const
 	{
-		if (_it->print == 0)
-			return(NULL);
-		return (&_it->val);
+
+		return (_it->get_pair());
 	}
 
 	template <class T>
 	bidirectional_iterator<T>	&bidirectional_iterator<T>::operator++() //it++ //nop
 	{
-		if (_it->print == 0)
-			return(_it->get_pair());
 		_it = _it->next();
 		return (*this);
 	}
@@ -114,8 +109,7 @@ namespace ft
 	template <class T>
 	bidirectional_iterator<T>	bidirectional_iterator<T>::operator++(int) //++it //nop
 	{
-	if (_it->print == 0)
-			return(NULL);
+
 		bidirectional_iterator	tmp = *this;
 		_it = _it->next();
 		return (tmp);

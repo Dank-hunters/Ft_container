@@ -41,7 +41,7 @@ namespace ft
 	public :
 		
 		
-		tree(const compare_type &comp = compare_type(), const allocator_type &alloc = allocator_type()) : _truc(0), _alloc(alloc), _compare(comp), _root(NULL), _size(0)
+		tree(const compare_type &comp = compare_type(), const allocator_type &alloc = allocator_type()) : _truc(0), _alloc(alloc), _compare(comp), _root(NULL), _size(0), _real_end(NULL), _maxi(NULL)
 		{}        
 	/*	tree(const tree &x): _alloc(NULL), _compare(NULL), _root(NULL), _size(0)
 		{
@@ -53,12 +53,33 @@ namespace ft
 			if (_root)
 				clear_all(_root);
 			_destroy_node(_root);
+			//_destroy_node(_real_end);
+
+
 		}
-		
+	node_ptr	minii() const
+	{
+		node_ptr	current;
+
+		current = _root;
+		while (current != NULL && current->left != NULL)
+			current = current->left;
+		return (current);
+	}
+
+	node_ptr	maxii() const
+	{
+		node_ptr	current;
+
+		current = _root;
+		while (current != NULL && current->right != NULL)
+			current = current->right;
+		return (current);
+	}
 
 	iterator	begin()
 	{
-		iterator	it(_root->mini(_root));
+		iterator	it(minii());
 
 		return (it);
 	}
@@ -74,6 +95,10 @@ namespace ft
 		{
 			node_ptr node = _alloc.allocate(sizeof(node_ptr));
 			_alloc.construct(node, val);
+			node->left = NULL;
+			node->right = NULL;
+			node->daddy= NULL;
+			node->end = NULL;
 			return(node);
 		}
 		public :
@@ -81,6 +106,10 @@ namespace ft
 		void	clear()
 		{
 			clear_all(_root);
+			//_destroy_node(_real_end);
+
+
+
 		}
 		
 		void clear_all(node_ptr	&tmp)
@@ -105,7 +134,10 @@ namespace ft
 				clear_all(_root);
 			}
 			else 
+			{
+
 				return;
+			}
 		}
 
 			void	_destroy_node(node_ptr &node)
@@ -118,13 +150,17 @@ namespace ft
 						//	_root->right = NULL;
 							_root = NULL;
 						}
-
+						if (node != NULL)
+						{
 						_alloc.destroy(node);
 						_alloc.deallocate(node, sizeof(node_ptr));
+						node = NULL;
+						}
 			}
 	
     void	is_new_max(const value_type &val, node_ptr last_add)
     {
+		
         node_ptr        tmp;
 		if (last_add == NULL)
 			return;
@@ -135,21 +171,30 @@ namespace ft
             last_add->end = tmp;
             tmp->daddy = last_add;
             _real_end = tmp;
+			_real_end->print = 0;
+            //_maxi->end->daddy =  _maxi;
         }
         else
         {
             if (_compare(_maxi->val.first, last_add->val.first))
             {
+				_maxi->right = NULL;
+
 				_real_end->print = 0;
                 _maxi->end  = NULL;
                 _maxi = last_add;
                 _maxi->end = _real_end;
                 _real_end->daddy =  _maxi;
+				_real_end->right = NULL;
+				_maxi->right = _real_end;
+           //     _maxi->end->daddy =  _maxi;
             }
         }
     }
-	void	if_del_max(const value_type &val)
+	void	if_del_max(node_ptr todel,  const value_type &val)
 	{
+		if (todel == NULL)
+			return;
 		if (_compare(_maxi->val.first, val.first))
 			return;
 		else if (_compare(val.first, _maxi->val.first))
@@ -164,7 +209,7 @@ namespace ft
 		}
 	}
 
-		/*ft::pair<iterator,bool>*/ void insert (const value_type &val)
+		ft::pair<iterator,bool>  insert (const value_type &val)
 		{
 			node_ptr	cursor = _root;
 			node_ptr	prev = NULL;
@@ -178,7 +223,7 @@ namespace ft
 				else if (_compare(cursor->val.first, val.first) && (var = 2))
 					cursor = cursor->right;
 				else
-					return;// (ft::make_pair(iterator(cursor, _root), false));
+					return (ft::make_pair(iterator(cursor), false));
 			}
 			node_ptr node = new_node(val);
 			_size++;
@@ -193,8 +238,9 @@ namespace ft
 
 			}
 			is_new_max(val ,node);
+			std::cout << "max " << _maxi->val.first << std::endl;
 			balancing(node->daddy);
-			//return(ft::make_pair(iterator((node), _root), true));
+			return(ft::make_pair(iterator(node), true));
 		}
 
 
@@ -218,7 +264,7 @@ namespace ft
             else
                 {
 					current_daddy = current->daddy;
-					if_del_max(val);
+					if_del_max(current_daddy, val);
 					current = oblitarate(current, direction);
 					balancing(current_daddy);
 				}
@@ -421,10 +467,6 @@ namespace ft
 		child->daddy = tie;
 	}
 
-	void	settruc()
-	{
-		_truc = 1;
-	}
 	void	balancing(node_ptr current)
 	{
 		int		left_height = 0;
@@ -433,6 +475,7 @@ namespace ft
 
 		while (current != NULL)
 		{
+			//std::cout << "biiiiiiiiiiiiite";
 			if (current->left != NULL)
 				left_height = 1 + get_sub_height(current->left);
 			if (current->right != NULL)
@@ -488,7 +531,7 @@ namespace ft
 		right_height = 0;
 		if (current == NULL)
 			return (0);
-		if (current->right != NULL)
+		if (current->right != NULL )
 			++right_height += get_sub_height(current->right);
 		if (current->left != NULL)
 			++left_height += get_sub_height(current->left);
@@ -498,11 +541,15 @@ namespace ft
 	}
 
 
-
-		node_ptr 	get_root()
+		size_type size() const
+		{
+			return(_root->size(_root));
+		}
+		node_ptr 	get_root() const
 		{
 			return(_root);
 		}
+
 
 	};
 	

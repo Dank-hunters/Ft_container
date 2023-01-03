@@ -8,6 +8,7 @@ namespace ft
 	{
 		public :
 		typedef Pair    value_type;
+		typedef size_t	size_type;
 		Node            *left;    
 		Node            *right;    
 		Node            *daddy;    
@@ -16,14 +17,14 @@ namespace ft
 		value_type      val;
 		
 
-		Node():  left(NULL), right(NULL), daddy(NULL), end(NULL), print(1), val(){}
+		Node():  left(NULL), right(NULL), daddy(NULL), end(NULL), print(1), val(NULL){}
 		Node(const value_type &val): left(NULL), right(NULL), daddy(NULL), end(NULL), print(1), val(val)
 		{} 
 		value_type *get_pair()
 		{
 			if (print == 0)
 				return(NULL);
-			return (val);
+			return (&val);
 
 		}
 		Node	*mini(Node *search)
@@ -48,11 +49,13 @@ namespace ft
 		{
 			Node *tmp = this;
 			if (tmp->right)
+			{
 				return mini(tmp->right);
+			}
 			Node* tmpdaddy = tmp->daddy;
-
 			while (tmpdaddy && tmp == tmpdaddy->right)
 			{
+
 				tmp = tmpdaddy;
 				tmpdaddy = tmpdaddy->daddy;
 			}
@@ -66,8 +69,6 @@ namespace ft
 				return maxi(tmp->left);
 
 			Node* p = tmp->daddy;
-			if (p->left)
-				std::cout << "NULLLLL" << std::endl;
 			while (p && tmp == p->left)
 			{
 				tmp = p;
@@ -75,10 +76,24 @@ namespace ft
 			}
 			return p;
 		}
+		size_type	size(Node *N) const
+		{
+			if (N == NULL)
+				return(0);
+			Node *tmp = tmp->mini(N);
+			size_type size = 0;
+			while (tmp != NULL)
+			{
+					tmp = tmp->next();
+					size++;
+			}
+			return (size);
+
+		}
 
 	};
-		
-/*	Node	*next()
+	/*
+	Node	*next()
 	{
 		Node		*current;
 
@@ -137,7 +152,7 @@ namespace ft
 				current = current->right;
 			return (current);
 		}
+	}
 	};
-	}*/
-
+*/
 }
