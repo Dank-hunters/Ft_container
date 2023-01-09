@@ -1,7 +1,7 @@
 #pragma once
-#include "node.hpp"
+#include "../map/node.hpp"
 
-#include <utility>
+//#include <utility>
 namespace ft
 {
 	template <class T>
@@ -35,7 +35,7 @@ namespace ft
 			bidirectional_iterator	&operator--();
 			bidirectional_iterator	operator--(int);
 
-		private :
+	//	private :
 
 			elem_type	*_it;
 			pointer		_pair;
@@ -43,7 +43,7 @@ namespace ft
 	
 
 	template <class T>
-	bidirectional_iterator<T>::bidirectional_iterator() : _it(), _pair()
+	bidirectional_iterator<T>::bidirectional_iterator() : _it(NULL), _pair()
 	{
 
 	}
@@ -55,7 +55,7 @@ namespace ft
 	}
 
 	template <class T>
-	bidirectional_iterator<T>::bidirectional_iterator(elem_type *copy) : _it(copy), _pair(copy->get_pair())
+	bidirectional_iterator<T>::bidirectional_iterator(elem_type *copy) : _it(copy), _pair(&copy->val)
 	{
 
 	}
@@ -77,7 +77,7 @@ namespace ft
 	template <class T>
 	bool	bidirectional_iterator<T>::operator==(const bidirectional_iterator &rhs) const
 	{
-		return (_pair == rhs.operator->());
+		return (&_it->val == rhs.operator->());
 	}
 
 	template <class T>
@@ -89,14 +89,16 @@ namespace ft
 	template <class T>
 	typename bidirectional_iterator<T>::reference	bidirectional_iterator<T>::operator*() const //nop
 	{
-		return (*_pair);
+
+			return (_it->val);
+
 	}
 
 	template <class T>
 	typename bidirectional_iterator<T>::pointer	bidirectional_iterator<T>::operator->() const
 	{
 
-		return (_it->get_pair());
+		return (&_it->val);
 	}
 
 	template <class T>
@@ -110,7 +112,9 @@ namespace ft
 	bidirectional_iterator<T>	bidirectional_iterator<T>::operator++(int) //++it //nop
 	{
 
+
 		bidirectional_iterator	tmp = *this;
+	
 		_it = _it->next();
 		return (tmp);
 	}
@@ -119,6 +123,7 @@ namespace ft
 	bidirectional_iterator<T>	&bidirectional_iterator<T>::operator--() //nop
 	{
 		_it = _it->prev();
+		
 		return (*this);
 	}
 
