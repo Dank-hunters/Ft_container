@@ -1,6 +1,6 @@
 For the test :
 
-just run the .sh
+just run the .sh with the name of the test
 
 ALL THE TEST ARE COMPILE WITH -Wall -Wextra -Werror -std=c++98
 

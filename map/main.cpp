@@ -1,76 +1,52 @@
-//#include "map.hpp"
+#include "map.hpp"
 #include <map>
-//#include "map.hpp"
-#include <iostream>
-#include "../includes/pair.hpp"
-#include "tree.hpp"
-#include <iostream>
 
-//void printHelper(ft::tree<std::string, int>::node_ptr root, std::string indent, bool last, bool first) 
-void printHelper(ft::tree<ft::pair<int, int> >::node_ptr root, std::string indent, bool last, bool first) 
-        {
-            if (root != nullptr) 
-            {
-                std::cout<<indent;
-                if (first) {
-                    std::cout<<"Root-";
-                    indent += "     ";
-                }
-                else if (last) {
-                    std::cout<<"R----";
-                    indent += "     ";
-                }
-                else {
-                    std::cout<<"L----";
-                    indent += "|    ";
-                }
-
-                std::cout << "(" << root->val.second << ")" << std::endl;
-                printHelper(root->left, indent, false, false);
-                printHelper(root->right, indent, true, false);
-            //    exit(0);
-                if (first)
-                    std::cout << std::endl;
-            }
-            else if (first)
-                std::cout << "NULL" << std::endl << std::endl;
-		}
+#define T1 int
+#define T2 int
 
 int main()
 {
-//	ft::map<std::string, int> tamere;
-	//ft::tree<std::string, int> tamere;
-	ft::tree<ft::pair<int, int> > tamere;
+	TESTED_NAMESPACE::map<T1, T2> m;
+	TESTED_NAMESPACE::map<T1, T2>::iterator it;
+	TESTED_NAMESPACE::map<T1, T2>::iterator ite;
 
-	tamere.insert(ft::make_pair<int, int>(50, 50));
-printHelper(tamere.get_root(), "", true, true);
-	tamere.insert(ft::make_pair<int, int>(25, 25));
-printHelper(tamere.get_root(), "", true, true);
-	tamere.insert(ft::make_pair<int, int>(75, 75));
-printHelper(tamere.get_root(), "", true, true);
-	tamere.insert(ft::make_pair<int, int>(15, 15));
-printHelper(tamere.get_root(), "", true, true);
-	tamere.insert(ft::make_pair<int, int>(40, 40));
-printHelper(tamere.get_root(), "", true, true);
-//	tamere.settruc();
-	tamere.insert(ft::make_pair<int, int>(60, 60));
-printHelper(tamere.get_root(), "", true, true);
-	tamere.insert(ft::make_pair<int, int>(80, 80));
-	tamere.insert(ft::make_pair<int, int>(35, 35));
-	tamere.insert(ft::make_pair<int, int>(55, 55));
-	tamere.insert(ft::make_pair<int, int>(65, 65));
-	tamere.insert(ft::make_pair<int, int>(90, 90));
-	tamere.insert(ft::make_pair<int, int>(62, 62));
-printHelper(tamere.get_root(), "", true, true);
-tamere.erase(ft::make_pair<int, int>(90, 90));	
-printHelper(tamere.get_root(), "", true, true);
-tamere.clear();
-printHelper(tamere.get_root(), "", true, true);
-/*
-tamere.erase(50);	
-printHelper(tamere.get_root(), "", true, true);
-tamere.erase(100);	
-printHelper(tamere.get_root(), "", true, true);*/
-return(0);
+	/*for (int i = 0; i < 5; i++)
+	{
+		m.insert(TESTED_NAMESPACE::make_pair(i, 100));
+	}
+	it = m.begin();
+
+	while(it != m.end())
+	{
+		std::cout << (++it)->first << std::endl;
+	}*/
+	
+		m.insert(TESTED_NAMESPACE::make_pair(10, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(5, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(15, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(3, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(14, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(20, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(13, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(17, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(24, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(2, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(12, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(18, 100));
+		m.insert(TESTED_NAMESPACE::make_pair(30, 100));
+		//m.erase((--(--(--m.end()))), m.end());
+	//	m.erase(10);
+		m.erase((--(--(--(--(--(--m.end())))))), m.end());
+		//m.insert(TESTED_NAMESPACE::make_pair(15, 100));
+
+		it = m.begin();
+		while(it != m.end())
+		{
+			std::cout << it->first << std::endl;
+			it++;
+
+		}
+	//	m.erase(m.begin(), m.end());
+	
 
 }

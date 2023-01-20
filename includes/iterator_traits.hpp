@@ -24,11 +24,11 @@ namespace ft
         typedef T                                       value_type;
         typedef T                                       *pointer;
         typedef T                                       &reference;
-        typedef random_access_iterator_tag         iterator_category;
+        typedef random_access_iterator_tag              iterator_category;
     };
     
     
-    template <class T> 
+ /*   template <class T> 
     struct iterator_traits<const T*>
     {
         typedef ptrdiff_t                               difference_type;
@@ -37,7 +37,7 @@ namespace ft
         typedef const T                                 &reference;
         typedef random_access_iterator_tag         iterator_category;
     };
-
+*/
     template <class Category, class T, class Distance = ptrdiff_t,
         class Pointer = T*, class Reference = T&>
         class iterator

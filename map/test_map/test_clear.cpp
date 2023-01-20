@@ -1,8 +1,7 @@
-#include "../map.hpp"
 #include <map>
 #include <list>
 #include <iostream>
-#include "../common.hpp"
+#include "common.hpp"
 
 
 #define T1 int

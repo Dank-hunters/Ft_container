@@ -43,18 +43,18 @@ namespace ft
 		
 		
 		tree(const compare_type &comp = compare_type(), const allocator_type &alloc = allocator_type()) : _alloc(alloc), _compare(comp), _root(NULL), _size(0), _real_end(), _maxi(NULL)
-		{}        
-		/*	tree(const tree &x): _alloc(NULL), _compare(NULL), _root(NULL), _size(0)
 		{
-			//deepthroat
-		}        */
+			_real_end = new_node(ft::pair<key_type, val_type>());
+			_real_end->print = 0;
+
+		}        
 
 		~tree()
 		{
 			if (_root)
 				clear_all(_root);
 			_root = _destroy_node(_root);
-			//_destroy_node(_real_end);
+			_destroy_node(_real_end);
 
 
 		}
@@ -67,7 +67,6 @@ namespace ft
 				current = current->left;
 			return (current);
 		}
-
 		node_ptr	maxii() const
 		{
 			node_ptr	current;
@@ -95,7 +94,7 @@ namespace ft
 		{
 			if (_root != NULL)
 				clear_all(_root);
-			_real_end = _destroy_node(_real_end);
+			//_real_end = _destroy_node(_real_end);
 			_maxi = NULL;
 		}
 
@@ -108,6 +107,7 @@ namespace ft
 			node->right = NULL;
 			node->daddy= NULL;
 			node->end = NULL;
+			node->max = _maxi;
 			return(node);
 		}
 
@@ -116,9 +116,7 @@ namespace ft
 		{
 			node_ptr	save = 0;
 			if (tmp->left)
-				{
 					clear_all(tmp->left);
-				}
 			else if (tmp->right)
 				clear_all(tmp->right);
 			else
@@ -130,31 +128,29 @@ namespace ft
 
 			}
 			if (save != _root)
-			{
 				clear_all(_root);
-			}
 			else 
-			{
-
 				return;
-			}
 		}
 
 		node_ptr	_destroy_node(node_ptr node)
 		{
+			int i =0;
 			_size--;
 			if (_size == 0)
-			{
-			//	_root->daddy = NULL;
-			//	_root->left = NULL;
-			//	_root->right = NULL;
 				_root = NULL;
-			}
 			if (node != NULL)
 			{
+				if (node == _maxi)
+				 	i = 1;
+				if (node == _root)
+				 	i = 2;
 				_alloc.destroy(node);
 				_alloc.deallocate(node, sizeof(node_ptr));
-			//	node = _alloc.allocate(1);
+				if (i == 1)
+					_maxi = NULL;
+				if (i == 2)
+					_root = NULL;
 				node = NULL;
 			}
 			return(NULL);
@@ -162,34 +158,48 @@ namespace ft
 	
     	void	is_new_max(const value_type &val, node_ptr last_add)
     	{
-    	    node_ptr        tmp;
+			(void)val;
+
 			if (last_add == NULL)
 				return;
     	    if (_maxi == NULL)
     	    {
-    	        tmp = new_node(val);
     	        _maxi = last_add;
-    	        last_add->end = tmp;
-    	        tmp->daddy = last_add;
-    	        _real_end = tmp;
+    	        last_add->end = _real_end;
+    	        _real_end->daddy = last_add;
 				_real_end->print = 0;
-    	        //_maxi->end->daddy =  _maxi;
+				add_max();
+			//	last_add->max = _maxi;
     	    }
     	    else
     	    {
     	        if (_compare(_maxi->val.first, last_add->val.first))
     	        {
-					_real_end->print = 0;
+
     	            _maxi->end  = NULL;
     	            _maxi = last_add;
     	            _maxi->end = _real_end;
     	            _real_end->daddy =  _maxi;
+					_maxi->max = _maxi;
+					add_max();
     	        }
     	    }
+			last_add->end = _real_end;
     	}
 
 		void	if_del_max(node_ptr todel,  const key_type &val)
 		{
+			if (_maxi == _root)
+			{
+				//_maxi->end = NULL;
+				if (_size > 1)
+					_maxi = _root->left;
+				_maxi->end = _real_end;
+
+				_real_end->daddy = _maxi;
+				_maxi->max = _maxi;
+
+			}
 			if (todel == NULL)
 				return;
 			if (_compare(_maxi->val.first, val))
@@ -203,20 +213,11 @@ namespace ft
 				_maxi->end = _real_end;
 				_real_end->daddy = _maxi;
 				_maxi->max = _maxi;
+				add_max();
 			}
 		}
 
-		void add_max()
-		{
-			node_ptr tmp = _root->mini(_root);
-			while(tmp != _maxi)
-			{
-				tmp->end = _real_end;
-				tmp->max = _maxi;
-				tmp = tmp->next();
-			}
-			_maxi->max = _maxi;
-		}
+
 				//////////			rotating /////////////////
 		void	balancing(node_ptr current)
 		{
@@ -276,8 +277,8 @@ namespace ft
 
 		void	RR_rotate(node_ptr grandpa, node_ptr parent)
 		{
-			//std::cout << "RR" << std::endl;
 			node_ptr	tie;
+
 			tie = grandpa->daddy;
 			grandpa->left = parent->right;
 			if (parent->right != NULL)
@@ -300,8 +301,6 @@ namespace ft
 		void	LL_rotate(node_ptr grandpa, node_ptr parent)
 		{
 			node_ptr	tie;
-
-			//std::cout << "LL" << std::endl;
 
 			tie = grandpa->daddy;
 			grandpa->right = parent->left;
@@ -327,8 +326,6 @@ namespace ft
 			node_ptr	tie;
 			node_ptr	ltmp;
 			node_ptr	rtmp;
-
-			//std::cout << "LR" << std::endl;
 
 			tie = grandpa->daddy;
 			ltmp = child->left;
@@ -361,7 +358,6 @@ namespace ft
 			node_ptr	tie;
 			node_ptr	ltmp;
 			node_ptr	rtmp;
-		//	std::cout << "RL" << std::endl;
 
 			tie = grandpa->daddy;
 			ltmp = child->left;
@@ -390,7 +386,8 @@ namespace ft
 		}
 
 
-		int		get_sub_height(node_ptr current)
+
+		 int		get_sub_height(node_ptr current)
 		{
 			int		left_height;
 			int		right_height;
@@ -424,12 +421,14 @@ namespace ft
 			{
 				_root = substitute;
 				substitute->daddy =NULL;
+
 				_destroy_node(&current);
 				return ;
 			}
 			direction = 2;
 			if (prev->left->val.first == current.val.first)
 				direction = 1;
+			
 			tmp = _destroy_node(tmp);
 			if (direction == 1)
 				prev->left = substitute;
@@ -446,22 +445,17 @@ namespace ft
     	    node_ptr		current;
     	    node_ptr		prev;
 			value_type		save_val;
-    	   // key_type    save_key;
-    	  //  val_type    save_val;
 
     	    current = &remove;
     	    prev = remove.daddy;
-			if (current->right  && current->left && !current->left->left)
-				current = current->left;
-			else
-				current = current->right;
+			current = current->left;
 			while (current != NULL)
     	    {
     	        substitute = current;
-    	        current = current->left;
+				current = current->right;
     	    }
     	    save_val = substitute->val;
-    	    erase(substitute->val.first);
+			erase(substitute->val.first);
     	    remove.val = save_val; //potentiel problem avec la validite des iterateurs
     	}
 
@@ -470,7 +464,7 @@ namespace ft
     	    node_ptr prev;
 
     	    prev = current.daddy;
-
+			
     	    if (current.left == NULL && current.right == NULL)
 			{
 				if (_size != 1)
@@ -478,17 +472,28 @@ namespace ft
 				_destroy_node(&current);
 			}
 			else if (current.left != NULL && current.right != NULL)
-			{//std::cout << "obli " << current.left->val.first << std::endl;
 					complex_oblitarate(current);
-			}else
-    	        {
+			else
 					single_oblitarate(current);
-			}
 			return (NULL);
     	}
 
 	public :
 
+		void add_max()
+		{
+			node_ptr tmp = _root->mini(_root);
+			if (_maxi != NULL)
+			{
+			while(tmp != _maxi)
+			{
+				tmp->end = _real_end;
+				tmp->max = _maxi;
+				tmp = tmp->next();
+			}
+			_maxi->max = _maxi;
+			}
+		}
 		ft::pair<iterator,bool>  insert (const value_type &val)
 		{
 			node_ptr	cursor = _root;
@@ -504,7 +509,6 @@ namespace ft
 					cursor = cursor->right;
 				else
 					return (ft::make_pair(iterator(cursor), false));
-
 			}
 			node_ptr node = new_node(val);
 			_size++;
@@ -514,13 +518,9 @@ namespace ft
 			else if (var == 2)
 				prev->right = node;
 			else
-			{
 				_root = node;
-
-			}
 			is_new_max(val ,node);
 			balancing(node->daddy);
-			add_max();
 
 			return(ft::make_pair(iterator(node), true));
 		}
@@ -530,11 +530,9 @@ namespace ft
 		{
 		node_ptr    current;
 		node_ptr    current_daddy;
-
         int            direction;
-		current_daddy = NULL; 
 
-        current = _root;
+		current = _root;
         direction = 0;
         while (current != NULL)
         {
@@ -543,21 +541,20 @@ namespace ft
             else if (_compare(current->val.first, val) && (direction = 2))
                 current = current->right;
             else
-                {
-					current_daddy = current->daddy;
-					if_del_max(current_daddy, val);
-					add_max();
-					current = oblitarate(*current, direction);
-					balancing(current_daddy);
-					return(1);
-				}
+            {
+				current_daddy = current->daddy;
+				
+				if_del_max(current_daddy, val);
+				current = oblitarate(*current, direction);
+				balancing(current_daddy);
+				return(1);
+			}
 		}
+
 		return(0);
 		}
 			
 
-
-  
 
 		size_type size() const
 		{
@@ -610,10 +607,16 @@ namespace ft
 
 			node_ptr root = x._root;
 			node_ptr endi = x._real_end;
+			node_ptr maxou = x._maxi;
+			size_type i = x._size;
 
+			x._size = _size;
+			x._maxi = _maxi;
 			x._root = _root;
 			x._real_end = _real_end;
 
+			_size = i;
+			_maxi = maxou;
 			_root = root;
 			_real_end = endi;
 
@@ -627,7 +630,6 @@ bool operator<(const tree<Content, Compare, Alloc>& lhs,  const tree<Content, Co
 bool operator>(const tree<Content, Compare, Alloc>& lhs,  const tree<Content, Compare, Alloc>& rhs){
 	return (lhs < rhs);
 }
-
 
 template<class Content, class Compare, class Alloc>
 bool operator==(const tree<Content, Compare, Alloc>& lhs, const tree<Content, Compare, Alloc>& rhs){

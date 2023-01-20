@@ -1,6 +1,6 @@
 #pragma once
 #include "../map/node.hpp"
-
+//#include "const_bidirectional_iterator.hpp"
 //#include <utility>
 namespace ft
 {
@@ -22,7 +22,7 @@ namespace ft
 			bidirectional_iterator(elem_type *copy);
 			~bidirectional_iterator();
 
-			bidirectional_iterator	&operator=(const bidirectional_iterator &copy); // avoir si le dereferencement est gerer
+			bidirectional_iterator	&operator=(const bidirectional_iterator &copy);
 
 			bool	operator==(const bidirectional_iterator &rhs) const;
 			bool	operator!=(const bidirectional_iterator &rhs) const;
@@ -35,7 +35,7 @@ namespace ft
 			bidirectional_iterator	&operator--();
 			bidirectional_iterator	operator--(int);
 
-	//	private :
+		private :
 
 			elem_type	*_it;
 			pointer		_pair;
@@ -87,11 +87,9 @@ namespace ft
 	}
 
 	template <class T>
-	typename bidirectional_iterator<T>::reference	bidirectional_iterator<T>::operator*() const //nop
+	typename bidirectional_iterator<T>::reference	bidirectional_iterator<T>::operator*() const
 	{
-
 			return (_it->val);
-
 	}
 
 	template <class T>
@@ -102,25 +100,27 @@ namespace ft
 	}
 
 	template <class T>
-	bidirectional_iterator<T>	&bidirectional_iterator<T>::operator++() //it++ //nop
+	bidirectional_iterator<T>	&bidirectional_iterator<T>::operator++() //it++ 
 	{
 		_it = _it->next();
+		_pair = _it->get_pair();
+
+
 		return (*this);
 	}
 
 	template <class T>
-	bidirectional_iterator<T>	bidirectional_iterator<T>::operator++(int) //++it //nop
+	bidirectional_iterator<T>	bidirectional_iterator<T>::operator++(int) //++it 
 	{
-
-
 		bidirectional_iterator	tmp = *this;
-	
 		_it = _it->next();
+		_pair = _it->get_pair();
+
 		return (tmp);
 	}
 
 	template <class T>
-	bidirectional_iterator<T>	&bidirectional_iterator<T>::operator--() //nop
+	bidirectional_iterator<T>	&bidirectional_iterator<T>::operator--() 
 	{
 		_it = _it->prev();
 		
@@ -128,10 +128,11 @@ namespace ft
 	}
 
 	template <class T>
-	bidirectional_iterator<T>	bidirectional_iterator<T>::operator--(int) //nop
+	bidirectional_iterator<T>	bidirectional_iterator<T>::operator--(int) 
 	{
 		bidirectional_iterator	tmp = *this;
 		_it = _it->prev();
+
 		return (tmp);
 	}
 

@@ -1,8 +1,7 @@
-#include "../map.hpp"
 #include <map>
 #include <list>
 #include <iostream>
-#include "../common.hpp"
+#include "common.hpp"
 
 #define T1 int
 #define T2 foo<int>
@@ -53,7 +52,6 @@ int		main(void)
 		lst.push_back(T3(i + 1, (i + 1) * 3));
 	TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
 	printSize(mp);
-
 	ft_const_bound(mp, -10);
 	ft_const_bound(mp, 1);
 	ft_const_bound(mp, 5);

@@ -6,12 +6,12 @@
 namespace ft
 {
 	template < class T>
-	class const_bidirectional_iterator
+	class const_bidirectional_iterator 
 	{
 	public :
 			typedef	T								value_type;
-			typedef T								*pointer;
-			typedef T								& reference;
+			typedef const T								*pointer;
+			typedef const T								& reference;
 			typedef	ptrdiff_t						difference_type;
 			typedef	iterator_traits<T>				iterator_category;
 			typedef	Node<T>							elem_type;
@@ -36,10 +36,18 @@ namespace ft
 			const_bidirectional_iterator	&operator--();
 			const_bidirectional_iterator	operator--(int);
 
-		//private :
+			//private :
 
 			elem_type	*_it;
 			pointer		_pair;
+			friend bool	operator==(const bidirectional_iterator<T> &lhs, const const_bidirectional_iterator &rhs) 
+			{
+				return (lhs.operator->() == rhs.operator->());
+			}
+			friend bool	operator!=(const bidirectional_iterator<T> &lhs, const const_bidirectional_iterator &rhs) 
+			{
+				return (lhs._it != rhs._it);
+			}
 	};
 	
 
@@ -58,8 +66,7 @@ namespace ft
 	const_bidirectional_iterator<T>::const_bidirectional_iterator(const ft::bidirectional_iterator<T> &copy)
     {
          _it = copy._it;
-          _pair = copy._pair;
-
+        _pair = copy._pair;
 	}
 
 	template <class T>
@@ -90,6 +97,13 @@ namespace ft
 		//return (_pair == rhs.operator->());
 	}
 
+	/*template <class T>
+	bool	operator==(const const_bidirectional_iterator<T> &lhs, const bidirectional_iterator<T> &rhs)
+	{
+		return (rhs.operator->() == lhs.operator->());
+		//return (_pair == rhs.operator->());
+	}*/
+
 	template <class T>
 	bool	const_bidirectional_iterator<T>::operator!=(const const_bidirectional_iterator &rhs) const
 	{
@@ -97,13 +111,13 @@ namespace ft
 	}
 
 	template <class T>
-	typename const_bidirectional_iterator<T>::reference	const_bidirectional_iterator<T>::operator*() const //nop
+	typename const_bidirectional_iterator< T>::reference	const_bidirectional_iterator<T>::operator*() const //nop
 	{
 		return (_it->val);
 	}
 
 	template <class T>
-	typename const_bidirectional_iterator<T>::pointer	const_bidirectional_iterator<T>::operator->() const
+	typename const_bidirectional_iterator< T>::pointer const_bidirectional_iterator<T>::operator->() const
 	{
 		return (&_it->val);
 

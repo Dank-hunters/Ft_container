@@ -6,7 +6,7 @@ diff diff diff2
 rm -rf a.out.dSYM
 
 c++ -std=c++98 -Wall -Wextra -Werror -D TESTED_NAMESP=ft main_test_stack.cpp
-printf "############## leaks test ####################"
+printf "############## leaks test ####################\n"
 leaks -atExit -- ./a.out
 rm a.out
 

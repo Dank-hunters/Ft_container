@@ -24,28 +24,16 @@ struct pair
     
     ~pair(){}
 
-    //RELATIONAL OPERATOR
-    //OPERATOR =
     pair& operator= (const pair& pr);
 };
 
-    //OPERATOR =
-   /* template <class T1, class T2>
-    pair<T1, T2>& pair::operator= (const pair<T1, T2>& pr)
+    template <class T1, class T2>
+    pair<T1, T2>& pair<T1, T2> ::operator= (const pair& pr)
     {
       first = pr.first;
       second = pr.second;
       return *this;
-    }*/
-    template <class T1, class T2>
-pair<T1, T2>& pair<T1, T2> ::operator= (const pair& pr)
-{
-/*	if (this == pr)
-		return(*this);*/
-  first = pr.first;
-  second = pr.second;
-  return *this;
-}
+    }
 
 
 //RELATIONAL OPERATOR
