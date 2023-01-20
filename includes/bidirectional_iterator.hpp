@@ -35,7 +35,7 @@ namespace ft
 			bidirectional_iterator	&operator--();
 			bidirectional_iterator	operator--(int);
 
-		private :
+	//	private :
 
 			elem_type	*_it;
 			pointer		_pair;

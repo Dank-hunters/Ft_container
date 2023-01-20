@@ -10,8 +10,8 @@ namespace ft
 	{
 	public :
 			typedef	T								value_type;
-			typedef const T								*pointer;
-			typedef const T								& reference;
+			typedef const T							*pointer;
+			typedef const T							&reference;
 			typedef	ptrdiff_t						difference_type;
 			typedef	iterator_traits<T>				iterator_category;
 			typedef	Node<T>							elem_type;
