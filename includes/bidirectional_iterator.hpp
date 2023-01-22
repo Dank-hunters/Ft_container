@@ -4,17 +4,18 @@
 //#include <utility>
 namespace ft
 {
+
 	template <class T>
 	class bidirectional_iterator
 	{
 	public :
-			typedef	T								value_type;
-			typedef	T								*pointer;
-			typedef	T								&reference;
-			typedef	ptrdiff_t						difference_type;
-			typedef	iterator_traits<T>				iterator_category;
-			typedef bidirectional_iterator<const T>	const_it;
-			typedef	Node<T>							elem_type;
+			typedef	T									value_type;
+			typedef	T									*pointer;
+			typedef	T									&reference;
+			typedef	std::ptrdiff_t						difference_type;
+			typedef	std::bidirectional_iterator_tag		iterator_category;
+			typedef bidirectional_iterator<const T>		const_it;
+			typedef	Node<T>								elem_type;
 
 			//CONSTRUCTORS
 			bidirectional_iterator();

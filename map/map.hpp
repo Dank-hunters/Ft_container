@@ -174,18 +174,13 @@ namespace ft
 				{
 					
 					first++;
-					//if (tmp != end())
 					this->erase(tmp);
-					//else 
-					//	return;
 					tmp = first;
 				}
 			}
 
 			void	clear()
 			{
-				//Avl.clear();
-				
 				erase(begin(), end());
 			}
 

@@ -191,13 +191,21 @@ namespace ft
 		{
 			if (_maxi == _root)
 			{
-				//_maxi->end = NULL;
-				if (_size > 1)
-					_maxi = _root->left;
+				_maxi->end = NULL;
+				if (_size == 1)
+				{
+					_maxi = NULL;
+					return;
+
+				}
+			//	if (_size > 1)
+				_maxi = _root->left;
 				_maxi->end = _real_end;
 
 				_real_end->daddy = _maxi;
 				_maxi->max = _maxi;
+				add_max();
+
 
 			}
 			if (todel == NULL)
@@ -543,7 +551,6 @@ namespace ft
             else
             {
 				current_daddy = current->daddy;
-				
 				if_del_max(current_daddy, val);
 				current = oblitarate(*current, direction);
 				balancing(current_daddy);
