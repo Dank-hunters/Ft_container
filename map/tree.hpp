@@ -22,8 +22,6 @@ namespace ft
 		typedef Pair													value_type;
 		typedef typename value_type::first_type									key_type;
 		typedef typename value_type::second_type									val_type;
-		//typedef _K														key_type;
-		//typedef _P														val_type;
 		typedef Compare													compare_type;
 		typedef Alloc													allocator_type;
 		typedef Node<Pair>												*node_ptr;
@@ -45,6 +43,7 @@ namespace ft
 		tree(const compare_type &comp = compare_type(), const allocator_type &alloc = allocator_type()) : _alloc(alloc), _compare(comp), _root(NULL), _size(0), _real_end(), _maxi(NULL)
 		{
 			_real_end = new_node(ft::pair<key_type, val_type>());
+		//	_size--;
 			_real_end->print = 0;
 
 		}        
@@ -169,7 +168,6 @@ namespace ft
     	        _real_end->daddy = last_add;
 				_real_end->print = 0;
 				add_max();
-			//	last_add->max = _maxi;
     	    }
     	    else
     	    {
@@ -196,17 +194,12 @@ namespace ft
 				{
 					_maxi = NULL;
 					return;
-
 				}
-			//	if (_size > 1)
-				_maxi = _root->left;
+					_maxi = _root->left;
 				_maxi->end = _real_end;
-
 				_real_end->daddy = _maxi;
 				_maxi->max = _maxi;
 				add_max();
-
-
 			}
 			if (todel == NULL)
 				return;
@@ -217,7 +210,10 @@ namespace ft
 			else 
 			{
 				_maxi->end = NULL;
-				_maxi = _maxi->daddy;
+				if (_maxi->left == NULL)
+					_maxi = _maxi->daddy;
+				else
+					_maxi = _maxi->left;
 				_maxi->end = _real_end;
 				_real_end->daddy = _maxi;
 				_maxi->max = _maxi;
@@ -395,7 +391,7 @@ namespace ft
 
 
 
-		 int		get_sub_height(node_ptr current)
+		int		get_sub_height(node_ptr current)
 		{
 			int		left_height;
 			int		right_height;
@@ -464,7 +460,7 @@ namespace ft
     	    }
     	    save_val = substitute->val;
 			erase(substitute->val.first);
-    	    remove.val = save_val; //potentiel problem avec la validite des iterateurs
+    	    remove.val = save_val; 
     	}
 
     	node_ptr	oblitarate(Node<Pair> &current, const int &direction)
@@ -557,15 +553,12 @@ namespace ft
 				return(1);
 			}
 		}
-
 		return(0);
 		}
-			
-
 
 		size_type size() const
 		{
-			return(_root->size(_root));
+			return(_size);
 		}
 		node_ptr 	get_root() const
 		{
@@ -601,8 +594,7 @@ namespace ft
 				else
 					return(iterator(cursor));
 			}
-			return(end());//iterator(_real_end));
-
+			return(end());
 		}
 
 		size_t	max_size() const

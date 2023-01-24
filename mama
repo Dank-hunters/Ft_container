@@ -1,0 +1,80 @@
+NAME = Container
+
+SRCS = main.cpp
+SRCSV = vector/test_vector/main.cpp \
+	   vector/test_vector/pop_push_erase.cpp \
+	   vector/test_vector/constr_vector.cpp	\
+	   vector/test_vector/assign_test.cpp	\
+	   vector/test_vector/iterator_insert_at_ope_test.cpp
+
+SRCSM = map/test_map/compare.cpp					\
+		map/test_map/test_clear.cpp					\
+		map/test_map/test_empty.cpp					\
+		map/test_map/test_erase_ez.cpp				\
+		map/test_map/test_insert.cpp				\
+		map/test_map/test_ite.cpp					\
+		map/test_map/test_upper_lower_equal.cpp		\
+		map/test_map/tryicky_erase_and_it_constr.cpp
+
+CC = c++
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -D TEST=ft
+
+
+OBJSV = $(SRCSV:.cpp=.o)
+
+OBJSVM = $(SRCSM:.cpp=.o)
+
+
+OBJS = $(SRCS:.cpp=.o)
+
+
+
+HEAD =		map/map.hpp \
+			vector/vector.hpp \
+			stack/stack.hpp
+
+DEFFT = -D TESTED_NAMESPACE=ft 
+DEFSTL = -D TESTED_NAMESPACE=std
+
+%.o: % .cpp $(HEAD)
+			$(CC) $(CFLAGS) -c $< -o $@  
+
+
+################ test all ################
+
+all : $(NAME)
+
+
+$(NAME) :  $(OBJS) $(HEAD) 
+			$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+
+
+################ test vector ################
+
+vectorft :  $(OBJSV) $(HEADV) 
+			$(CC) $(CFLAGS) $(DEFFT) -o $(NAME) $(OBJSV)
+
+vectorstl :  $(OBJSV) $(HEADV) 
+			$(CC) $(CFLAGS) $(DEFSTL) -o $(NAME) $(OBJSV)
+
+
+################ test map ################
+
+mapft :  $(OBJSM) $(HEADM) 
+			$(CC) $(CFLAGS) $(DEFFT) -o $(NAME) $(OBJSM)
+
+mapstl :  $(OBJSM) $(HEADM) 
+			$(CC) $(CFLAGS) $(DEFSTL) -o $(NAME) $(OBJSM)
+
+
+################ test stack ################
+
+
+clean:		
+			rm -f $(OBJS)
+fclean : clean
+			rm -f $(NAME)
+
+re :		fclean all
+
+.PHONY : all clean re fclean

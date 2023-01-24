@@ -7,6 +7,7 @@
 #include "../includes/enable_if.hpp"
 #include "../includes/compare.hpp"
 #include "../includes/reverse_iterator.hpp"
+
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> > 
@@ -113,7 +114,7 @@ namespace ft
 						i++;
 					}
 					_end_of_storage = _end;
-					while ( i < n)
+					while (i < n)
 					{
 						++_end_of_storage;
 						i++;
@@ -251,7 +252,7 @@ namespace ft
 				void reserve (size_type n)
 				{
 					if (n > capacity())
-					add_memory(n);
+						add_memory(n);
 				}
 				void resize (size_type n, value_type val = value_type())
 				{
@@ -365,6 +366,7 @@ namespace ft
 						index = position - this->begin();
 						this->insert(position, 1, val);
 						return iterator(this->begin() + index);
+				
 				
 				}
 

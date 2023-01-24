@@ -1,5 +1,5 @@
 #pragma once 
-
+#include <map>
 #include "tree.hpp"
 
 
@@ -126,7 +126,6 @@ namespace ft
 
 			size_type max_size() const
 			{
-				//return _alloc.max_size();
 				return Avl.max_size();
 			}
 
@@ -354,7 +353,6 @@ namespace ft
 			const map<Key,T,Compare,Alloc>& rhs )
 			{
 					return !(lhs > rhs);
-
 			}
 			template <class Key, class T, class Compare, class Alloc>  bool operator>  ( const map<Key,T,Compare,Alloc>& lhs,                    
 			const map<Key,T,Compare,Alloc>& rhs )

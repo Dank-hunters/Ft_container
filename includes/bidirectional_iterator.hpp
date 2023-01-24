@@ -13,6 +13,7 @@ namespace ft
 			typedef	T									*pointer;
 			typedef	T									&reference;
 			typedef	std::ptrdiff_t						difference_type;
+		//	typedef	iterator_traits<T>	iterator_category;
 			typedef	std::bidirectional_iterator_tag		iterator_category;
 			typedef bidirectional_iterator<const T>		const_it;
 			typedef	Node<T>								elem_type;
@@ -104,7 +105,7 @@ namespace ft
 	bidirectional_iterator<T>	&bidirectional_iterator<T>::operator++() //it++ 
 	{
 		_it = _it->next();
-		_pair = _it->get_pair();
+	//	_pair = _it->get_pair();
 
 
 		return (*this);
@@ -115,7 +116,7 @@ namespace ft
 	{
 		bidirectional_iterator	tmp = *this;
 		_it = _it->next();
-		_pair = _it->get_pair();
+		//_pair = _it->get_pair();
 
 		return (tmp);
 	}
