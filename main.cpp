@@ -5,7 +5,7 @@
 	#include <map>
 	#include <stack>
 	#include <vector>
-	namespace TEST = std;
+//	namespace TEST = std;
 //#else
 	#include "map/map.hpp"
 	#include "stack/stack.hpp"
@@ -23,7 +23,7 @@ struct Buffer
 };
 
 
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+#define COUNT ((MAX_RAM / (int)sizeof(Buffer)))
 
 template<typename T>
 class MutantStack : public TEST::stack<T>

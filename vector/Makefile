@@ -10,7 +10,12 @@ STD_SRC = test_vector/mainstd.cpp
 
 INCLUDE_PATH = .
 
-HEADER = vector.hpp
+HEADER = vector.hpp \
+		../includes/random_acces_iterator.hpp \
+		../includes/enable_if.hpp \
+		../includes/compare.hpp \
+		../includes/reverse_iterator.hpp 
+
 
 FT_OBJ = $(FT_SRC:.cpp=.o)
 

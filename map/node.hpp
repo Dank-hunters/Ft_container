@@ -15,12 +15,13 @@ namespace ft
 			Node 			*end;
 			Node 			*max;
 			bool			print;
+			size_t			height;
 			value_type      val;
 		
 
-			Node():  left(NULL), right(NULL), daddy(NULL), end(NULL), max(NULL),  print(1), val(NULL){}
+			Node():  left(NULL), right(NULL), daddy(NULL), end(NULL), max(NULL),  print(1), height(0),  val(NULL){}
 			
-			Node(const value_type &val): left(NULL), right(NULL), daddy(NULL), end(NULL), max(NULL),  print(1), val(val){} 
+			Node(const value_type &val): left(NULL), right(NULL), daddy(NULL), end(NULL), max(NULL),  print(1), height(0), val(val){} 
 
 			value_type *get_pair()
 			{

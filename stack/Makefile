@@ -4,22 +4,17 @@ FT_NAME = FT_Container
 
 STD_NAME = STD_Container
 
-FT_SRC = test_map/mainft.cpp
+FT_SRC = test_stack/main_test_stack_ft.cpp
 
-STD_SRC = test_map/mainstd.cpp
+STD_SRC = test_stack/main_test_stack_std.cpp
 
 INCLUDE_PATH = .
 
-HEADER = map.hpp node.hpp tree.hpp test_map/common.hpp test_map/base.hpp \
+HEADER = stack.hpp ../vector/vector.hpp \
 		../includes/random_acces_iterator.hpp \
-		../includes/iterator_traits.hpp \
 		../includes/enable_if.hpp \
 		../includes/compare.hpp \
-		
-		#../includes/bidirectional_iterator.hpp \ 
-		#../includes/const_bidirectional_iterator.hpp \ 
-		#../includes/pair.hpp
-
+		../includes/reverse_iterator.hpp 
 
 FT_OBJ = $(FT_SRC:.cpp=.o)
 

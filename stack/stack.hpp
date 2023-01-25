@@ -13,13 +13,13 @@ namespace ft
         typedef Container   container_type;
         typedef T           value_type;
         typedef size_t      size_type;
-    private:
-        container_type  _ctnr;
+    protected:
+        container_type  c;
     public:
 
         explicit stack(const container_type& ctnr = container_type())
         {
-            _ctnr = ctnr;
+            c = ctnr;
         }
 
         ~stack()
@@ -27,31 +27,31 @@ namespace ft
 
         bool                empty() const
         {
-            return _ctnr.empty();
+            return c.empty();
         }
 
         size_type           size() const
         {
-            return _ctnr.size();
+            return c.size();
         }
 
         value_type&         top()
         {
-            return _ctnr.back();
+            return c.back();
         }
         
         const value_type&   top() const
         {
-            return _ctnr.back();
+            return c.back();
         }
 
         void                push(const value_type& val)
         {
-            _ctnr.push_back(val);
+            c.push_back(val);
         }
         void                pop()
         {
-            _ctnr.pop_back();
+            c.pop_back();
         }
     template <class T1, class C1>  
     friend bool operator== (const stack<T1,C1>& lhs, const stack<T1,C1>& rhs);
@@ -71,37 +71,37 @@ namespace ft
 template <class T1, class C1>  
     bool operator== (const stack<T1,C1>& lhs, const stack<T1,C1>& rhs)
 {
-    return lhs._ctnr == rhs._ctnr;
+    return lhs.c == rhs.c;
 }
 
 template <class T1, class C1>    
     bool operator!= (const stack<T1,C1>& lhs, const stack<T1,C1>& rhs)
 {
-    return lhs._ctnr != rhs._ctnr;
+    return lhs.c != rhs.c;
 }
 
 template <class T1, class C1>    
     bool operator<  (const stack<T1,C1>& lhs, const stack<T1,C1>& rhs)
 {
-    return lhs._ctnr < rhs._ctnr;
+    return lhs.c < rhs.c;
 }
 
 template <class T1, class C1>    
     bool operator<= (const stack<T1,C1>& lhs, const stack<T1,C1>& rhs)
 {
-    return lhs._ctnr <= rhs._ctnr;
+    return lhs.c <= rhs.c;
 }
 
 template <class T1, class C1>    
     bool operator>  (const stack<T1,C1>& lhs, const stack<T1,C1>& rhs)
 {
-    return lhs._ctnr > rhs._ctnr;
+    return lhs.c > rhs.c;
 }
 
 template <class T1, class C1>    
     bool operator>= (const stack<T1,C1>& lhs, const stack<T1,C1>& rhs)
 {
-    return lhs._ctnr >= rhs._ctnr;
+    return lhs.c >= rhs.c;
 }
 
 //FRIEND IS FOR ACCESS PRIVAITE ELEMENT (LIKE CTNR IN OVERLOAD)

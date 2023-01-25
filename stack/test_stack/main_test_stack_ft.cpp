@@ -2,6 +2,8 @@
 #include <iostream>
 #include "../vector/vector.hpp"
 
+#define TESTED_NAMESP ft
+
 void	printStack(TESTED_NAMESP::stack<int, TESTED_NAMESP::vector<int> >	to_print)
 {
 
@@ -81,11 +83,6 @@ int main()
 	std::cout << std::endl;
 	std::cout << std::endl;
 	std::cout << std::endl;
-
-
-
-
-
 	return(0);
 }
 

@@ -39,6 +39,8 @@ namespace ft
 		node_ptr														_maxi;
 	public :
 		
+
+	
 		
 		tree(const compare_type &comp = compare_type(), const allocator_type &alloc = allocator_type()) : _alloc(alloc), _compare(comp), _root(NULL), _size(0), _real_end(), _maxi(NULL)
 		{
@@ -223,62 +225,50 @@ namespace ft
 
 
 				//////////			rotating /////////////////
-		void	balancing(node_ptr current)
-		{
-			int		left_height = 0;
-			int		right_height = 0;
-			int		factor;
-
-			while (current != NULL && current != _real_end)
-			{
-				left_height = 0;
-				right_height = 0;
-				if (current->left != NULL)
-						left_height = 1 + get_sub_height(current->left);
-				if (current->right != NULL)
-					right_height = 1 + get_sub_height(current->right);
-				factor = left_height - right_height;
-				if (factor > 1 || factor < -1)
-					choose_rotate(current, factor);
-				current = current->daddy;
-			}
-		}
 
 
-		void	choose_rotate(node_ptr current, int factor)
-    	{
+		void    choose_rotate(node_ptr current, int factor)
+  		  {
     	    int        left_height;
     	    int        right_height;
 
     	    left_height = 0;
     	    right_height = 0;
-    	    if (factor > 1)
-    	    {
-    	        if (current->left->left != NULL)
-    	            left_height = 1 + get_sub_height(current->left->left);
-    	        if (current->left->right != NULL)
-    	            right_height = 1 + get_sub_height(current->left->right);
-    	        factor = left_height - right_height;
-    	        if (factor > 0)
-    	            RR_rotate(current, current->left);
-    	        else
-    	            LR_rotate(current, current->left, current->left->right);
-
-    	    }
-    	    else
+    	    if (factor <= -2)
     	    {
     	        if (current->right->left != NULL)
-    	            left_height = 1 + get_sub_height(current->right->left);
-    	        if (current->right->right != NULL)
-    	            right_height = 1 + get_sub_height(current->right->right);
-    	        factor = left_height - right_height;
-    	        if (factor > 0)
     	            RL_rotate(current, current->right, current->right->left);
     	        else
     	            LL_rotate(current, current->right);
     	    }
+    	    else
+    	    {
+    	        if (current->left->right != NULL)
+    	            LR_rotate(current, current->left, current->left->right);
+    	        else
+    	            RR_rotate(current, current->left);
+    	    }
     	}
+		void    balancing(node_ptr current)
+    	{
+    	    int            left_height;
+    	    int            right_height;
+    	    int            factor;
 
+    	    while (current != NULL)
+    	    {
+    	        left_height = 0;
+    	        right_height = 0;
+    	        if (current->left != NULL)
+    	            left_height = 1 + current->left->height;
+    	        if (current->right != NULL)
+    	            right_height = 1 + current->right->height;
+    	        factor = left_height - right_height;
+    	        if (factor <= -2 || factor >= 2)
+    	            choose_rotate(current, factor);
+    	        current = current->daddy;
+    	    }
+    	}
 		void	RR_rotate(node_ptr grandpa, node_ptr parent)
 		{
 			node_ptr	tie;
@@ -293,14 +283,18 @@ namespace ft
 			if (tie == NULL)
 			{
 				_root = parent;
+				update_height(grandpa);
+				//update_height(parent); //delete
 				return ;
 			}
 			if (tie->left == grandpa)
 				tie->left = parent;
 			else
 				tie->right = parent;
-
+			update_height(grandpa);
+			//update_height(parent); //delete
 		}
+
 
 		void	LL_rotate(node_ptr grandpa, node_ptr parent)
 		{
@@ -316,13 +310,16 @@ namespace ft
 			if (tie == NULL)
 			{
 				_root = parent;
+				update_height(grandpa);
+				//update_height(parent);//delete
 				return ;
 			}
 			if (tie->left == grandpa)
 				tie->left = parent;
 			else
 				tie->right = parent;
-
+			update_height(grandpa);
+		//	update_height(parent);//delete
 		}
 
 		void	LR_rotate(node_ptr grandpa, node_ptr parent, node_ptr child)
@@ -348,6 +345,9 @@ namespace ft
 			{
 				_root = child;
 				child->daddy = NULL;
+				update_height(grandpa);
+				solo_update_height(parent); //opti possible
+				//update_height(child); //delete
 				return ;
 			}
 			if (tie->left == grandpa)
@@ -355,6 +355,9 @@ namespace ft
 			else
 				tie->right = child;
 			child->daddy = tie;
+			update_height(grandpa);
+			solo_update_height(parent); //opti possible
+		//	update_height(child); //delete
 		}	
 
 		void	RL_rotate(node_ptr grandpa, node_ptr parent, node_ptr child)
@@ -380,6 +383,10 @@ namespace ft
 			{
 				_root = child;
 				child->daddy = NULL;
+				update_height(grandpa);
+				solo_update_height(parent); //opti possible
+			//	update_height(child); //delete
+
 				return ;
 			}
 			if (tie->left == grandpa)
@@ -387,32 +394,17 @@ namespace ft
 			else
 				tie->right = child;
 			child->daddy = tie;
+			update_height(grandpa);
+			solo_update_height(parent); //opti possible
+		//	update_height(child); //delete
+
 		}
 
-
-
-		int		get_sub_height(node_ptr current)
-		{
-			int		left_height;
-			int		right_height;
-
-			left_height = 0;
-			right_height = 0;
-			if (current == NULL)
-				return (0);
-			if (current->right != NULL )
-				++right_height += get_sub_height(current->right);
-			if (current->left != NULL)
-				++left_height += get_sub_height(current->left);
-			if (left_height > right_height)
-				return (left_height);
-			return (right_height);
-		}
 
     	void    single_oblitarate(Node<Pair> &current)
  		{
-			node_ptr	prev;
 			node_ptr	tmp;
+			node_ptr	prev;
 			node_ptr	substitute;
 			int			direction;
 
@@ -524,9 +516,48 @@ namespace ft
 			else
 				_root = node;
 			is_new_max(val ,node);
+			update_height(node->daddy);
 			balancing(node->daddy);
 
 			return(ft::make_pair(iterator(node), true));
+		}
+		void	solo_update_height(node_ptr node)
+		{
+			node_ptr current;
+
+			current = node;
+				if (current == NULL)
+					return;
+				if (current->left && current->right)
+					current->height = 1 + std::max(current->left->height, current->right->height);
+				else if(current->left)
+					current->height = 1 + current->left->height;
+				else if (current->right)
+					current->height = 1 + current->right->height;
+				else
+					current->height = 0;
+		}
+
+		inline void	update_height(node_ptr node)
+		{
+			node_ptr current;
+			
+			current = node;
+			if (current == NULL)
+				return;
+			while (current != NULL)
+			{
+				if (current->left && current->right)
+					current->height = 1 + std::max(current->left->height, current->right->height);
+				else if(current->left)
+					current->height = 1 + current->left->height;
+				else if (current->right)
+					current->height = 1 + current->right->height;
+				else
+					current->height = 0;
+				current = current->daddy;
+			}
+			return;
 		}
 
 
@@ -548,6 +579,8 @@ namespace ft
             {
 				current_daddy = current->daddy;
 				if_del_max(current_daddy, val);
+				//up_height(current->daddy);
+
 				current = oblitarate(*current, direction);
 				balancing(current_daddy);
 				return(1);
