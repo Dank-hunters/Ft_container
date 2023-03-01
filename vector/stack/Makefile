@@ -4,18 +4,17 @@ FT_NAME = FT_Container
 
 STD_NAME = STD_Container
 
-FT_SRC = test_vector/mainft.cpp
+FT_SRC = test_stack/main_test_stack_ft.cpp
 
-STD_SRC = test_vector/mainstd.cpp
+STD_SRC = test_stack/main_test_stack_std.cpp
 
 INCLUDE_PATH = .
 
-HEADER = vector.hpp \
+HEADER = stack.hpp ../vector/vector.hpp \
 		../includes/random_acces_iterator.hpp \
 		../includes/enable_if.hpp \
 		../includes/compare.hpp \
-		../includes/reverse_iterator.hpp \
-		../includes/iterator_traits.hpp 
+		../includes/reverse_iterator.hpp 
 
 FT_OBJ = $(FT_SRC:.cpp=.o)
 
